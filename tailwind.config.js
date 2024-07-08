@@ -9,16 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        customColor: "#1a202c",
+        customColor: "#1a202c", // Add a custom color with the name 'customColor'
       },
       spacing: {
-        128: "32rem",
+        128: "32rem", // Add a custom spacing value with the key '128'
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"], // Add custom fonts
+        sans: ["Inter", "sans-serif"], // Add a custom font family with the name 'sans'
       },
       screens: {
-        "3xl": "1600px", // Add custom breakpoints
+        "3xl": "1600px", // Add a custom breakpoint with the name '3xl'
       },
     },
   },

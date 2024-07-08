@@ -1,12 +1,14 @@
 import React from "react"
 import "./styles/App.css"
 
-function App() {
+import { Home, Footer } from "./pages/index"
 
+function App() {
   return (
-    <>
-      <h1 className="font-bold text-6xl">Hello TON</h1>
-    </>
+    <main className="bg-white md:bg-purple-500 md:w-[1024px] mx-auto h-screen flex flex-col justify-between">
+      <Home />
+      <Footer />
+    </main>
   )
 }
 
