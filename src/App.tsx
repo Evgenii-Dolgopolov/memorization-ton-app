@@ -1,13 +1,17 @@
 import React from "react"
 import "./styles/App.css"
+import { Deck, Footer, Learn, Statistics, Settings } from "./pages/index"
 
-import { Home, Footer } from "./pages/index"
+const App: React.FC = () => {
+  const [currentTab, setCurrentTab] = React.useState<string>('Deck');
 
-function App() {
   return (
     <main className="text-black md:bg-purple-500 md:w-[1024px] mx-auto h-screen flex flex-col justify-between">
-      <Home />
-      <Footer />
+      {currentTab === "Learn" && <Learn />}
+      {currentTab === "Deck" && <Deck />}
+      {currentTab === "Statistics" && <Statistics />}
+      {currentTab === "Settings" && <Settings />}
+      <Footer setCurrentTab={setCurrentTab} />
     </main>
   )
 }
