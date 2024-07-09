@@ -2,12 +2,20 @@ import React from "react"
 
 const Footer = () => {
   return (
-    <menu className="bg-purple-200 h-1/6">
+    <menu className="h-1/6">
       <div className=" h-full flex m-auto justify-around">
-      <button className="w-full border-2 border-indigo-800">Create deck</button>
-      <button className="w-full border-2 border-indigo-800">Start learning</button>
-      <button className="w-full border-2 border-indigo-800">Statistics</button>
-      <button className="w-full border-2 border-indigo-800">Settings</button>
+        <button className="w-full border-2 border-none">
+          <i className="fa-solid fa-layer-group fa-3x"></i>
+        </button>
+        <button className="w-full border-2 border-none">
+          <i className="fa-solid fa-brain fa-3x"></i>
+        </button>
+        <button className="w-full border-2 border-none">
+          <i className="fa-solid fa-chart-simple fa-3x"></i>
+        </button>
+        <button className="w-full border-2 border-none">
+          <i className="fa-solid fa-gear fa-3x"></i>
+        </button>
       </div>
     </menu>
   )
