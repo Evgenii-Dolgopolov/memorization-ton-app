@@ -8,12 +8,11 @@ const Footer: React.FC<FooterProps> = ({ setCurrentTab }) => {
   const handleTabChange = (tab: string) => {
     setCurrentTab(tab)
 
-    // Add the class immediately to the <i> element
+    // Animate menu icons on click
     const iconElement = document.querySelector(`#${tab}Button i`)
     if (iconElement) {
       iconElement.classList.add("fa-bounce")
 
-      // Remove the class after 2 seconds
       setTimeout(() => {
         iconElement.classList.remove("fa-bounce")
       }, 750)
