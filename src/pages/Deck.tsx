@@ -10,7 +10,6 @@ const Deck: React.FC = () => {
       <Card />
       <Card />
       <Card />
-      {/* Add more Card components as needed */}
     </div>
   );
 };

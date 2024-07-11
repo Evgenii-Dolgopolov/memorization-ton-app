@@ -11,7 +11,7 @@ const App: React.FC = () => {
       {currentTab === "Deck" && <Deck />}
       {currentTab === "Statistics" && <Statistics />}
       {currentTab === "Settings" && <Settings />}
-      <Footer setCurrentTab={setCurrentTab} />
+      <Footer currentTab={currentTab} setCurrentTab={setCurrentTab} />
     </main>
   )
 }

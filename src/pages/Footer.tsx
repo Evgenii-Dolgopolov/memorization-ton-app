@@ -4,7 +4,7 @@ interface FooterProps {
   setCurrentTab: (tab: string) => void
 }
 
-const Footer: React.FC<FooterProps> = ({ setCurrentTab }) => {
+const Footer: React.FC<FooterProps> = ({ currentTab, setCurrentTab }) => {
   const handleTabChange = (tab: string) => {
     setCurrentTab(tab)
 
@@ -25,25 +25,25 @@ const Footer: React.FC<FooterProps> = ({ setCurrentTab }) => {
         <button
           id="LearnButton"
           onClick={() => handleTabChange("Learn")}
-          className="w-full border-2 border-none">
+          className={`w-full border-2 border-none ${currentTab === "Learn" ? "bg-blue-500 text-white" : ""}`}>
           <i className="fa-solid fa-brain fa-3x"></i>
         </button>
         <button
           id="DeckButton"
           onClick={() => handleTabChange("Deck")}
-          className="w-full border-2 border-none">
+          className={`w-full border-2 border-none ${currentTab === "Deck" ? "bg-blue-500 text-white" : ""}`}>
           <i className="fa-solid fa-layer-group fa-3x"></i>
         </button>
         <button
           id="StatisticsButton"
           onClick={() => handleTabChange("Statistics")}
-          className="w-full border-2 border-none">
+          className={`w-full border-2 border-none ${currentTab === "Statistics" ? "bg-blue-500 text-white" : ""}`}>
           <i className="fa-solid fa-chart-simple fa-3x"></i>
         </button>
         <button
           id="SettingsButton"
           onClick={() => handleTabChange("Settings")}
-          className="w-full border-2 border-none">
+          className={`w-full border-2 border-none ${currentTab === "Settings" ? "bg-blue-500 text-white" : ""}`}>
           <i className="fa-solid fa-gear fa-3x"></i>
         </button>
       </div>
