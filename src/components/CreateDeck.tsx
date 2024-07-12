@@ -1,12 +1,17 @@
-import React, { useState } from "react"
+import React from "react"
 
+type Deck = {
+  name:  "string"
+  description:  "string"
+  userId: "string"
+}
 
-const CreateDeck = ({ onCreate }) => {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [userId, setUserId] = useState("")
+const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
+  const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
+  const [name, setName] = React.useState("")
+  const [description, setDescription] = React.useState("")
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const response = await fetch("http://localhost:8080/decks", {
       method: "POST",
@@ -23,6 +28,9 @@ const CreateDeck = ({ onCreate }) => {
     if (response.ok) {
       const newDeck = await response.json()
       onCreate(newDeck)
+      setName("")
+      setDescription("")
+      console.log("POST successful")
     } else {
       console.error("Failed to create deck")
     }
@@ -55,21 +63,6 @@ const CreateDeck = ({ onCreate }) => {
           id="description"
           value={description}
           onChange={e => setDescription(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        />
-      </div>
-      <div>
-        <label
-          htmlFor="userId"
-          className="block text-sm font-medium text-gray-700">
-          User ID
-        </label>
-        <input
-          type="text"
-          id="userId"
-          value={userId}
-          onChange={e => setUserId(e.target.value)}
-          required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>

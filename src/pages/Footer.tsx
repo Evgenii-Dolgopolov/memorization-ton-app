@@ -20,7 +20,7 @@ const Footer: React.FC<FooterProps> = ({ currentTab, setCurrentTab }) => {
   }
 
   return (
-    <menu className="fixed bottom-0 w-full h-1/6 bg-white shadow-lg">
+    <menu className="fixed bottom-0 left-0 w-full h-1/6 bg-white shadow-lg">
       <div className="h-full flex m-auto justify-around">
         <button
           id="LearnButton"
