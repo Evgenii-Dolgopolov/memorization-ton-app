@@ -1,16 +1,12 @@
-import React from "react";
+import React from "react"
 
 interface CardContainerProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const CardContainer: React.FC<CardContainerProps> = ({ children }) => {
-  return (
-    <div>
-      {children}
-    </div>
-  );
-};
+  return <div>{children}</div>
+}
 
 const Card: React.FC = () => {
   return (
@@ -19,7 +15,7 @@ const Card: React.FC = () => {
         Card Content
       </div>
     </CardContainer>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card
