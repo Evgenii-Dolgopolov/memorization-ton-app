@@ -12,7 +12,7 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
   const [description, setDescription] = React.useState("")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     const response = await fetch("http://localhost:8080/decks", {
       method: "POST",
       headers: {
@@ -23,18 +23,25 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
         description,
         userId,
       }),
-    })
-
+    });
+  
     if (response.ok) {
-      const newDeck = await response.json()
-      onCreate(newDeck)
-      setName("")
-      setDescription("")
-      console.log("POST successful")
+      const { id } = await response.json(); // Assuming response returns { id: '...' }
+      // Now fetch the details of the created deck using its id
+      const deckResponse = await fetch(`http://localhost:8080/decks/${id}`);
+      if (deckResponse.ok) {
+        const newDeck = await deckResponse.json();
+        onCreate(newDeck); // Pass the full newDeck object to onCreate
+        setName("");
+        setDescription("");
+        console.log("POST successful");
+      } else {
+        console.error("Failed to fetch deck details");
+      }
     } else {
-      console.error("Failed to create deck")
+      console.error("Failed to create deck");
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
