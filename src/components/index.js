@@ -1,4 +1,4 @@
 import CreateDeck from "./CreateDeck"
-import Card from "./Card"
+import Deck from "./Deck"
 
-export { CreateDeck, Card }
+export { CreateDeck, Deck }
