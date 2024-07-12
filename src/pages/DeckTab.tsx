@@ -24,9 +24,7 @@ const DeckTab: React.FC = () => {
         New Deck
       </button>
       {showCreateDeckForm && (
-        <div className="flex flex-1 max-h-40 h-40 w-full bg-yellow-200 p-4 rounded-md shadow-md">
           <CreateDeck onCreate={handleCreateDeck} />
-        </div>
       )}
       {showCreatedDeck &&
         decks.map((deck, index) => <Deck key={index} deck={deck} />)}
