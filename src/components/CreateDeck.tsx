@@ -32,6 +32,7 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
       if (deckResponse.ok) {
         const newDeck = await deckResponse.json()
         onCreate(newDeck) // Pass the full newDeck object to onCreate
+        console.log(onCreate(newDeck))
         setName("")
         setDescription("")
         console.log("POST successful")

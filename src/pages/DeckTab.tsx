@@ -3,17 +3,15 @@ import { Deck, CreateDeck } from "../components/index"
 
 const DeckTab: React.FC = () => {
   const [decks, setDecks] = useState<any[]>([])
-  const [showCreateDeckForm, setShowCreateDeckForm] = useState(false)
-  const [showCreatedDeck, setShowCreatedDeck] = useState(false)
+  const [isCreatingDeck, setIsCreatingDeck] = useState(false)
 
   const handleNewDeckClick = () => {
-    setShowCreateDeckForm(true)
+    setIsCreatingDeck(true)
   }
 
   const handleCreateDeck = (newDeck: any) => {
     setDecks([...decks, newDeck])
-    setShowCreateDeckForm(false)
-    setShowCreatedDeck(true)
+    setIsCreatingDeck(false)
   }
 
   return (
@@ -23,11 +21,10 @@ const DeckTab: React.FC = () => {
         className="inline-flex justify-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         New Deck
       </button>
-      {showCreateDeckForm && (
-          <CreateDeck onCreate={handleCreateDeck} />
-      )}
-      {showCreatedDeck &&
-        decks.map((deck, index) => <Deck key={index} deck={deck} />)}
+      {isCreatingDeck && <CreateDeck onCreate={handleCreateDeck} />}
+      {decks.map((deck, index) => (
+        <Deck key={index} deck={deck} />
+      ))}
     </div>
   )
 }
