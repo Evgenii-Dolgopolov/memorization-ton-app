@@ -6,7 +6,7 @@ const App: React.FC = () => {
   const [currentTab, setCurrentTab] = React.useState<string>("DeckTab")
 
   return (
-    <main className="text-black md:bg-purple-500 max-w-screen-md mx-auto pb-24 min-h-screen w-full flex flex-col justify-between relative">
+    <main className="text-black md:bg-purple-500 max-w-screen-md w-full min-h-screen mx-auto pb-24 flex flex-col justify-between relative">
       {currentTab === "Learn" && <Learn />}
       {currentTab === "DeckTab" && <DeckTab />}
       {currentTab === "Statistics" && <Statistics />}

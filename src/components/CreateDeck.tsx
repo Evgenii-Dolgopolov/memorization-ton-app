@@ -26,13 +26,15 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
     })
 
     if (response.ok) {
-      const { id } = await response.json() // Assuming response returns { id: '...' }
-      // Now fetch the details of the created deck using its id
+      const { id } = await response.json()
+      // Fetch the details of the created deck using its id
       const deckResponse = await fetch(`http://localhost:8080/decks/${id}`)
       if (deckResponse.ok) {
         const newDeck = await deckResponse.json()
-        onCreate(newDeck) // Pass the full newDeck object to onCreate
-        console.log(onCreate(newDeck))
+        console.log(newDeck)
+
+        // Pass the full newDeck object to onCreate
+        onCreate(newDeck)
         setName("")
         setDescription("")
         console.log("POST successful")
