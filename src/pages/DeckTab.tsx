@@ -1,9 +1,58 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Deck, CreateDeck } from "../components/index"
+// import useSWR from "swr"
 
 const DeckTab: React.FC = () => {
+  const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
   const [decks, setDecks] = useState<any[]>([])
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
+
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+
+  // const fetcher = (...args: [RequestInfo, RequestInit?]) =>
+  //   fetch(...args).then(res = res.json())
+  // const apiUrl = `http://localhost:8080/users/${userId}/decks`
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   }
+  // }
+
+  // const { data, err, isLoading } = useSWR([apiUrl, options], fetcher)
+
+  // console.log(data)
+
+  useEffect(() => {
+    console.log("useEffect triggered")
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/users/${userId}/decks`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`)
+        }
+        const data = await response.json()
+        setDecks(data)
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
+
+  console.log(decks)
 
   const handleNewDeckClick = () => {
     setIsCreatingDeck(true)
@@ -22,9 +71,13 @@ const DeckTab: React.FC = () => {
         New Deck
       </button>
       {isCreatingDeck && <CreateDeck onCreate={handleCreateDeck} />}
-      {decks.map((deck, index) => (
-        <Deck key={index} deck={deck} />
-      ))}
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        decks.map(deck => <Deck key={deck.id} deck={deck} />)
+      )}
     </div>
   )
 }

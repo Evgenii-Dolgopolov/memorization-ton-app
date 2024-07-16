@@ -2,18 +2,19 @@ import React from "react"
 
 interface DeckProps {
   deck: {
-    ID: string
-    Name: string
-    Description: string
-    UserID: string
-    CreatedAt: string
-    UpdatedAt: string
-    DeletedAt: string | null
+    id: string
+    name: string
+    description: string
+    userId: string
+    createdAt: string
+    updatedAt: string
+    deletedAt: string | null
   }
 }
 
 const Deck: React.FC<DeckProps> = ({ deck }) => {
-  const { Name: name, Description: description } = deck
+  console.log(deck)
+  const { name, description } = deck
 
   return (
     <div className="flex flex-col items-center justify-center w-full bg-yellow-200 rounded-md shadow-md p-4 gap-4">
