@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { Deck, CreateDeck } from "../components/index"
-// import useSWR from "swr"
+
+type Deck = {
+  id: string
+  name: string
+  description: string
+}
 
 const DeckTab: React.FC = () => {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
-  const [decks, setDecks] = useState<any[]>([])
+  const [decks, setDecks] = useState<Deck[]>([])
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
-
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-
-  // const fetcher = (...args: [RequestInfo, RequestInit?]) =>
-  //   fetch(...args).then(res = res.json())
-  // const apiUrl = `http://localhost:8080/users/${userId}/decks`
-  // const options = {
-  //   method: "GET",
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   }
-  // }
-
-  // const { data, err, isLoading } = useSWR([apiUrl, options], fetcher)
-
-  // console.log(data)
 
   useEffect(() => {
     console.log("useEffect triggered")
@@ -42,24 +31,27 @@ const DeckTab: React.FC = () => {
           throw new Error(`Error: ${response.status}`)
         }
         const data = await response.json()
+        console.log(data)
         setDecks(data)
       } catch (error) {
-        setError(error.message)
+        if (error instanceof Error) {
+          setError(error.message)
+        } else {
+          setError("An unknown error occurred")
+        }
       } finally {
         setLoading(false)
       }
     }
+    console.log(decks)
     fetchData()
-  }, [])
-
-  console.log(decks)
+  }, [isCreatingDeck])
 
   const handleNewDeckClick = () => {
     setIsCreatingDeck(true)
   }
 
-  const handleCreateDeck = (newDeck: any) => {
-    setDecks([...decks, newDeck])
+  const handleCreateDeck = () => {
     setIsCreatingDeck(false)
   }
 
@@ -76,7 +68,7 @@ const DeckTab: React.FC = () => {
       ) : error ? (
         <p>Error: {error}</p>
       ) : (
-        decks.map(deck => <Deck key={deck.id} deck={deck} />)
+        decks.slice().reverse().map(deck => <Deck key={deck.id} deck={deck} />)
       )}
     </div>
   )

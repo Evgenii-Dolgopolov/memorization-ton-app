@@ -1,6 +1,6 @@
 import React from "react"
 
-interface FooterProps {
+type FooterProps = {
   currentTab: string
   setCurrentTab: (tab: string) => void
 }
