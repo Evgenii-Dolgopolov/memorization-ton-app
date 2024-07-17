@@ -1,6 +1,12 @@
-import React from "react"
+import React, { useState } from "react"
 
 type Deck = {
+  id: string
+  name: string
+  description: string
+}
+
+type NewDeck = {
   name: string
   description: string
   userId: string
@@ -8,12 +14,11 @@ type Deck = {
 
 const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
-  const [name, setName] = React.useState("")
-  const [description, setDescription] = React.useState("")
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const response = await fetch("http://localhost:8080/decks", {
+  const createDeck = async ({ name, description, userId }: NewDeck) => {
+    const response = await fetch ("http://localhost:8080/decks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,25 +29,42 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
         userId,
       }),
     })
+    if (!response.ok) {
+      throw new Error("Failed to create deck")
+    }
+    const {id} = await response.json()
+    return id
+  }
 
-    if (response.ok) {
-      const { id } = await response.json()
-      // Fetch the details of the created deck using its id
-      const deckResponse = await fetch(`http://localhost:8080/decks/${id}`)
-      if (deckResponse.ok) {
-        const newDeck = await deckResponse.json()
-        console.log(newDeck)
+  const fetchDeckDetails = async (id: string) => {
+    const response = await fetch(`http://localhost:8080/decks/${id}`)
 
-        // Pass the full newDeck object to onCreate
-        onCreate(newDeck)
-        setName("")
-        setDescription("")
-        console.log("POST successful")
+    if (!response.ok) {
+      throw new Error("Failed to fetch deck details")
+    }
+
+    const deck = await response.json()
+    return deck
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    try {
+      const id = await createDeck({ name, description, userId })
+      const newDeck = await fetchDeckDetails(id)
+
+      onCreate(newDeck)
+      setName("")
+      setDescription("")
+
+      console.log("POST successful")
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
       } else {
-        console.error("Failed to fetch deck details")
+        console.error("An unknown error occurred")
       }
-    } else {
-      console.error("Failed to create deck")
     }
   }
 
@@ -60,6 +82,7 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
             id="name"
             value={name}
             onChange={e => setName(e.target.value)}
+            maxLength={20}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
@@ -74,6 +97,7 @@ const CreateDeck = ({ onCreate }: { onCreate: (deck: Deck) => void }) => {
             id="description"
             value={description}
             onChange={e => setDescription(e.target.value)}
+            maxLength={70}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
         </div>

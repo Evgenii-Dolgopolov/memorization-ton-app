@@ -15,7 +15,6 @@ const DeckTab: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log("useEffect triggered")
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -31,7 +30,6 @@ const DeckTab: React.FC = () => {
           throw new Error(`Error: ${response.status}`)
         }
         const data = await response.json()
-        console.log(data)
         setDecks(data)
       } catch (error) {
         if (error instanceof Error) {
@@ -68,7 +66,10 @@ const DeckTab: React.FC = () => {
       ) : error ? (
         <p>Error: {error}</p>
       ) : (
-        decks.slice().reverse().map(deck => <Deck key={deck.id} deck={deck} />)
+        decks
+          .slice()
+          .reverse()
+          .map(deck => <Deck key={deck.id} deck={deck} />)
       )}
     </div>
   )
