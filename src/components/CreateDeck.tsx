@@ -3,7 +3,7 @@ import React, { useState } from "react"
 type Deck = {
   id: string
   name: string
-  description: string
+
 }
 
 type NewDeck = {
