@@ -1,7 +1,6 @@
-import DeckTab from "./DeckTab"
-import Footer from "./Footer"
-import Learn from "./Learn"
+import Decks from "./Decks"
+import Play from "./Play"
 import Statistics from "./Statistics"
 import Settings from "./Settings"
 
-export { DeckTab, Footer, Learn, Statistics, Settings }
+export { Decks, Play, Statistics, Settings }

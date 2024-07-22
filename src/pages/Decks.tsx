@@ -7,7 +7,7 @@ type Deck = {
   description: string
 }
 
-const DeckTab: React.FC = () => {
+const Decks: React.FC = () => {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
   const [decks, setDecks] = useState<Deck[]>([])
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
@@ -75,4 +75,4 @@ const DeckTab: React.FC = () => {
   )
 }
 
-export default DeckTab
+export default Decks

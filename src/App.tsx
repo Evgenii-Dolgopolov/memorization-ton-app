@@ -1,20 +1,28 @@
 import React from "react"
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom"
 import "./styles/App.css"
-import { DeckTab, Footer, Learn, Statistics, Settings } from "./pages/index"
-
-type Tab = "Learn" | "DeckTab" | "Statistics" | "Settings"
+import { Decks, Play, Statistics, Settings } from "./pages/index"
+import { Menu } from "./components/index"
 
 const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = React.useState<Tab>("DeckTab")
-
   return (
-    <main className="text-black md:bg-purple-500 max-w-screen-md w-full min-h-screen mx-auto pb-24 flex flex-col justify-between relative">
-      {currentTab === "Learn" && <Learn />}
-      {currentTab === "DeckTab" && <DeckTab />}
-      {currentTab === "Statistics" && <Statistics />}
-      {currentTab === "Settings" && <Settings />}
-      <Footer currentTab={currentTab} setCurrentTab={setCurrentTab} />
-    </main>
+    <Router>
+      <main className="text-black md:bg-purple-500 max-w-screen-md w-full min-h-screen mx-auto pb-24 flex flex-col justify-between relative">
+        <Routes>
+          <Route path="/" element={<Navigate to="/decks" />} />
+          <Route path="/play" element={<Play />} />
+          <Route path="/decks" element={<Decks />} />
+          <Route path="/statistics" element={<Statistics />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+        <Menu />
+      </main>
+    </Router>
   )
 }
 
