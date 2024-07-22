@@ -2,8 +2,10 @@ import React from "react"
 import "./styles/App.css"
 import { DeckTab, Footer, Learn, Statistics, Settings } from "./pages/index"
 
+type Tab = "Learn" | "DeckTab" | "Statistics" | "Settings"
+
 const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = React.useState<string>("DeckTab")
+  const [currentTab, setCurrentTab] = React.useState<Tab>("DeckTab")
 
   return (
     <main className="text-black md:bg-purple-500 max-w-screen-md w-full min-h-screen mx-auto pb-24 flex flex-col justify-between relative">
