@@ -11,7 +11,7 @@ const Decks: React.FC = () => {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
   const [decks, setDecks] = useState<Deck[]>([])
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Decks: React.FC = () => {
           setError("An unknown error occurred")
         }
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
     console.log(decks)
@@ -61,7 +61,7 @@ const Decks: React.FC = () => {
         New Deck
       </button>
       {isCreatingDeck && <CreateDeck onCreate={handleCreateDeck} />}
-      {loading ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>Error: {error}</p>
@@ -69,7 +69,7 @@ const Decks: React.FC = () => {
         decks
           .slice()
           .reverse()
-          .map(deck => <Deck key={deck.id} deck={deck} />)
+          .map(deck => <Deck key={deck.id} deck={deck} id={deck.id}/>)
       )}
     </div>
   )

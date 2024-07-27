@@ -40,7 +40,7 @@ const Menu: React.FC = () => {
   }, [location.pathname])
 
   return (
-    <menu className="fixed bottom-0 left-0 w-full h-1/6 bg-white shadow-lg">
+    <nav className="fixed bottom-0 left-0 w-full h-1/6 bg-white shadow-lg">
       <div className="h-full flex m-auto justify-around">
         <Link
           to="/play"
@@ -76,7 +76,7 @@ const Menu: React.FC = () => {
           <i ref={settingsIconRef} className="fa-solid fa-gear fa-3x"></i>
         </Link>
       </div>
-    </menu>
+    </nav>
   )
 }
 
