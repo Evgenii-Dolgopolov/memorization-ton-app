@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-type Card = {
-  id: string
+type Cards = {
+  deckId: string
   question: string
   answer: string
 }
 
 const DeckDetails: React.FC = () => {
   const { deckId } = useParams<{ deckId: string }>()
-  const [cards, setCards] = useState<Card[]>([])
+  const [cards, setCards] = useState<Cards[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const transformData = (data: any) => {
+    return data.map((item: any) => ({
+      deckId: item.ID,
+      question: item.Question,
+      answer: item.Answer
+    }))
+  }
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -22,13 +30,16 @@ const DeckDetails: React.FC = () => {
             "Content-Type": "application/json",
           },
         })
-        console.log("Response status:", response.status)
+
         const data = await response.json()
         console.log("Fetched data:", data)
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`)
         }
-        setCards(data)
+
+        const formattedData = transformData(data)
+        setCards(formattedData)
+        console.log(cards)
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message)
@@ -54,8 +65,8 @@ const DeckDetails: React.FC = () => {
     <div className="">
       {cards.map(card => (
         <div key={card.deckId} className="bg-orange-300">
-          <h2>Question: {card.Question}</h2>
-          <h1>Answer: {card.Answer}</h1>
+          <h2>Question: {card.question}</h2>
+          <h1>Answer: {card.answer}</h1>
         </div>
       ))}
     </div>
