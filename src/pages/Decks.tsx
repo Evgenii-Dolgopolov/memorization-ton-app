@@ -14,34 +14,34 @@ const Decks: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/users/${userId}/decks`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`)
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/users/${userId}/decks`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        const data = await response.json()
-        setDecks(data)
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message)
-        } else {
-          setError("An unknown error occurred")
-        }
-      } finally {
-        setIsLoading(false)
+      )
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
       }
+      const data = await response.json()
+      setDecks(data)
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError("An unknown error occurred")
+      }
+    } finally {
+      setIsLoading(false)
     }
-    console.log(decks)
+  }
+
+  useEffect(() => {
     fetchData()
   }, [isCreatingDeck])
 
@@ -51,6 +51,7 @@ const Decks: React.FC = () => {
 
   const handleCreateDeck = () => {
     setIsCreatingDeck(false)
+    fetchData()
   }
 
   return (
@@ -69,7 +70,7 @@ const Decks: React.FC = () => {
         decks
           .slice()
           .reverse()
-          .map(deck => <Deck key={deck.id} deck={deck} id={deck.id}/>)
+          .map(deck => <Deck key={deck.id} deck={deck} />)
       )}
     </div>
   )

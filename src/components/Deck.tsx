@@ -7,9 +7,10 @@ type DeckProps = {
     name: string
     description: string
   }
+  fetchDecks: () => Promise<void>
 }
 
-const Deck: React.FC<DeckProps> = ({ deck }) => {
+const Deck: React.FC<DeckProps> = ({ deck, fetchDecks }) => {
   const { id } = deck
   const [name, setName] = useState(deck.name)
   const [description, setDescription] = useState(deck.description)
@@ -43,6 +44,7 @@ const Deck: React.FC<DeckProps> = ({ deck }) => {
 
       const data = await response.json()
       console.log("Update successful:", data)
+      fetchDecks()
     } catch (error) {
       console.error("Error updating deck:", error)
       if (error instanceof Error) {
@@ -53,6 +55,28 @@ const Deck: React.FC<DeckProps> = ({ deck }) => {
     } finally {
       setIsLoading(false)
       setIsEditing(false)
+    }
+  }
+
+  const handleDeleteClick = async (event: React.MouseEvent) => {
+    event.preventDefault()
+    try {
+      const response = await fetch(`http://localhost:8080/decks/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
+      }
+      await fetchDecks() // Refetch decks after a deck is deleted
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError("An unknown error occurred")
+      }
     }
   }
 
@@ -107,13 +131,22 @@ const Deck: React.FC<DeckProps> = ({ deck }) => {
           <div className="flex gap-4">
             <button
               onClick={handleEditClick}
-              className="px-4 py-2 bg-blue-400 rounded-3xl">
-              edit
+              className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">
+              Edit deck
+            </button>
+            <button
+              onClick={handleDeleteClick}
+              className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">
+              Delete deck
             </button>
             <Link to={`/decks/${id}/cards`}>
-              <button className="px-4 py-2 bg-blue-400 rounded-3xl">+</button>
+              <button className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">
+                Cards
+              </button>
             </Link>
-            <button className="px-4 py-2 bg-blue-400 rounded-3xl">...</button>
+            <button className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">
+              ...
+            </button>
           </div>
         </>
       )}
