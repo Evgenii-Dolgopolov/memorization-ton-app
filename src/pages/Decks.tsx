@@ -14,7 +14,7 @@ const Decks: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchData = async () => {
+  const fetchDecks = async () => {
     try {
       const response = await fetch(
         `http://localhost:8080/users/${userId}/decks`,
@@ -42,7 +42,7 @@ const Decks: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchData()
+    fetchDecks()
   }, [isCreatingDeck])
 
   const handleNewDeckClick = () => {
@@ -70,7 +70,7 @@ const Decks: React.FC = () => {
         decks
           .slice()
           .reverse()
-          .map(deck => <Deck key={deck.id} deck={deck} />)
+          .map(deck => <Deck key={deck.id} deck={deck} fetchDecks={fetchDecks} />)
       )}
     </div>
   )
