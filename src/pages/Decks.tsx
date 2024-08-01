@@ -51,7 +51,7 @@ const Decks: React.FC = () => {
 
   const handleCreateDeck = () => {
     setIsCreatingDeck(false)
-    fetchData()
+    fetchDecks()
   }
 
   return (
