@@ -1,0 +1,141 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import CardItem from "../components/CardItem";
+import ReusableButtons from "../components/ReusableButtons";
+
+type Card = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+const Cards: React.FC = () => {
+  const { deckId } = useParams<{ deckId: string }>();
+  const [cards, setCards] = useState<Card[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const transformData = (data: any) => {
+    return data.map((item: any) => ({
+      id: item.ID,
+      question: item.Question,
+      answer: item.Answer,
+    }));
+  };
+
+  const fetchCards = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/decks/${deckId}/cards`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const formattedData = transformData(data);
+      setCards(formattedData);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCards();
+  }, [deckId]);
+
+  const handleUpdate = async (id: string, question: string, answer: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/cards/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question, answer }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      await fetchCards();
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/cards/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      await fetchCards();
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  return (
+    <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
+      <h1 className="text-center text-4xl font-bold">Your Cards</h1>
+
+      <button className="self-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Add Card
+      </button>
+
+      <div className="flex flex-col items-center gap-4">
+        {cards.length === 0 ? (
+          <p>No cards found.</p>
+        ) : (
+          cards.map((card) => (
+            <div key={card.id} className="flex flex-col items-center gap-4">
+              <CardItem
+                id={card.id}
+                question={card.question}
+                answer={card.answer}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+              />
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Cards;

@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom"
 import "./styles/App.css"
-import { Decks, Play, Statistics, Settings, DeckDetails } from "./pages/index"
+import { Decks, Play, Statistics, Settings, Cards } from "./pages/index"
 import { Menu } from "./components/index"
 
 const App: React.FC = () => {
@@ -17,7 +17,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Navigate to="/decks" />} />
           <Route path="/play" element={<Play />} />
           <Route path="/decks" element={<Decks />} />
-          <Route path="/decks/:deckId/cards" element={<DeckDetails />} />
+          <Route path="/decks/:deckId/cards" element={<Cards />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

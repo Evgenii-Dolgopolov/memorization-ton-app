@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Deck, CreateDeck } from "../components/index"
 
-type Deck = {
+type DeckType = {
   id: string
   name: string
   description: string
@@ -9,7 +9,7 @@ type Deck = {
 
 const Decks: React.FC = () => {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
-  const [decks, setDecks] = useState<Deck[]>([])
+  const [decks, setDecks] = useState<DeckType[]>([])
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -70,7 +70,23 @@ const Decks: React.FC = () => {
         decks
           .slice()
           .reverse()
-          .map(deck => <Deck key={deck.id} deck={deck} fetchDecks={fetchDecks} />)
+          .map(deck => (
+            <Deck
+              key={deck.id}
+              deck={deck}
+              fetchDecks={fetchDecks}
+              buttonsConfig={{
+                edit: {
+                  endpoint: `http://localhost:8080/decks/${deck.id}`,
+                  method: "PATCH"
+                },
+                delete: {
+                  endpoint: `http://localhost:8080/decks/${deck.id}`,
+                  method: "DELETE"
+                }
+              }}
+            />
+          ))
       )}
     </div>
   )
