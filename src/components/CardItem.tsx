@@ -5,24 +5,45 @@ type CardItemProps = {
   id: string;
   question: string;
   answer: string;
-  onUpdate: (id: string, question: string, answer: string) => void;
-  onDelete: (id: string) => void;
+  fetchCards: () => Promise<void>;
 };
 
-const CardItem: React.FC<CardItemProps> = ({ id, question, answer, onUpdate, onDelete }) => {
+const CardItem: React.FC<CardItemProps> = ({ id, question, answer, fetchCards }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newQuestion, setNewQuestion] = useState(question);
   const [newAnswer, setNewAnswer] = useState(answer);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
   const handleSaveClick = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await onUpdate(id, newQuestion, newAnswer);
+      const response = await fetch(`http://localhost:8080/cards/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: newQuestion,
+          answer: newAnswer,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      fetchCards();
     } catch (error) {
+      console.error("Error updating card:", error);
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -34,9 +55,19 @@ const CardItem: React.FC<CardItemProps> = ({ id, question, answer, onUpdate, onD
     }
   };
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = async (event: React.MouseEvent) => {
+    event.preventDefault();
     try {
-      await onDelete(id);
+      const response = await fetch(`http://localhost:8080/cards/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      await fetchCards(); // Refetch cards after a card is deleted
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -98,19 +129,11 @@ const CardItem: React.FC<CardItemProps> = ({ id, question, answer, onUpdate, onD
           </div>
 
           <ReusableButtons
-            buttonsConfig={{
-              edit: {
-                endpoint: `http://localhost:8080/cards/${id}`,
-                method: "PATCH",
-                body: { question: newQuestion, answer: newAnswer },
-                onSuccess: () => onUpdate(id, newQuestion, newAnswer),
-              },
-              delete: {
-                endpoint: `http://localhost:8080/cards/${id}`,
-                method: "DELETE",
-                onSuccess: () => onDelete(id),
-              },
-            }}
+            id={id}
+            onEditClick={handleEditClick}
+            onDeleteClick={handleDeleteClick}
+            editButtonLabel="Edit card"
+            deleteButtonLabel="Delete card"
           />
         </>
       )}
