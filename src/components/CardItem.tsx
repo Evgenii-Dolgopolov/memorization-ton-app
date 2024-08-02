@@ -41,7 +41,7 @@ const CardItem: React.FC<CardItemProps> = ({ id, question, answer, fetchCards })
 
       const data = await response.json();
       console.log("Update successful:", data);
-      fetchCards();
+      await fetchCards();
     } catch (error) {
       console.error("Error updating card:", error);
       if (error instanceof Error) {
