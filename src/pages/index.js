@@ -1,7 +1,7 @@
-import Decks from "./Decks"
-import Play from "./Play"
-import Statistics from "./Statistics"
-import Settings from "./Settings"
-import Cards from "./Cards"
+import Decks from "./Decks.jsx"
+import Play from "./Play.jsx"
+import Statistics from "./Statistics.jsx"
+import Settings from "./Settings.jsx"
+import Cards from "./Cards.jsx"
 
 export { Decks, Play, Statistics, Settings, Cards }

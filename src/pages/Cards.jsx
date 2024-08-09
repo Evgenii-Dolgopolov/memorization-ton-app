@@ -2,21 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CardItem, ReusableForm } from "../components/index";
 
-type Card = {
-  id: string;
-  question: string;
-  answer: string;
-};
-
-const Cards: React.FC = () => {
-  const { deckId } = useParams<{ deckId: string }>();
-  const [cards, setCards] = useState<Card[]>([]);
+function Cards() {
+  const { deckId } = useParams();
+  const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  const transformData = (data: any) => {
-    return data.map((item: any) => ({
+  const transformData = (data) => {
+    return data.map((item) => ({
       id: item.ID,
       question: item.Question,
       answer: item.Answer,
@@ -102,6 +96,6 @@ const Cards: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Cards;
