@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react"
-import { Deck, CreateDeck } from "../components/index"
+import React, { useState, useEffect } from "react";
+import { Deck, CreateDeck } from "../components/index";
 
-type DeckType = {
-  id: string
-  name: string
-  description: string
-}
-
-const Decks: React.FC = () => {
-  const userId = "3a06fc24-becf-482a-8098-91470ce047d5"
-  const [decks, setDecks] = useState<DeckType[]>([])
-  const [isCreatingDeck, setIsCreatingDeck] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+function Decks() {
+  const userId = "3a06fc24-becf-482a-8098-91470ce047d5";
+  const [decks, setDecks] = useState([]);
+  const [isCreatingDeck, setIsCreatingDeck] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchDecks = async () => {
     try {
@@ -22,37 +16,37 @@ const Decks: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-          },
+          }
         }
-      )
+      );
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`)
+        throw new Error(`Error: ${response.status}`);
       }
-      const data = await response.json()
-      setDecks(data)
+      const data = await response.json();
+      setDecks(data);
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message)
+        setError(error.message);
       } else {
-        setError("An unknown error occurred")
+        setError("An unknown error occurred");
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchDecks()
-  }, [isCreatingDeck])
+    fetchDecks();
+  }, [isCreatingDeck]);
 
   const handleNewDeckClick = () => {
-    setIsCreatingDeck(true)
-  }
+    setIsCreatingDeck(true);
+  };
 
   const handleCreateDeck = () => {
-    setIsCreatingDeck(false)
-    fetchDecks()
-  }
+    setIsCreatingDeck(false);
+    fetchDecks();
+  };
 
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
@@ -89,7 +83,7 @@ const Decks: React.FC = () => {
           ))
       )}
     </div>
-  )
+  );
 }
 
-export default Decks
+export default Decks;

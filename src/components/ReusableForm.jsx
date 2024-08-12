@@ -1,30 +1,16 @@
 import React, { useState } from "react";
 
-type ReusableFormProps = {
-  endpoint: string;
-  fetchData: () => Promise<void>;
-  fields: { id: string; label: string; type: "text" | "textarea"; maxLength: number }[];
-  buttonText: string;
-  initialValues: { [key: string]: string };
-};
-
-const ReusableForm: React.FC<ReusableFormProps> = ({
-  endpoint,
-  fetchData,
-  fields,
-  buttonText,
-  initialValues,
-}) => {
+const ReusableForm = ({ endpoint, fetchData, fields, buttonText, initialValues }) => {
   const [formValues, setFormValues] = useState(initialValues);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     const { id, value } = e.target;
     setFormValues((prevValues) => ({ ...prevValues, [id]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -46,11 +32,7 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
       await fetchData();
     } catch (error) {
       console.error(`Error ${buttonText.toLowerCase()}:`, error);
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unknown error occurred");
-      }
+      setError(error.message || "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
