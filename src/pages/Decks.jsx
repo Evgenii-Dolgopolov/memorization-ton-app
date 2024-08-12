@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Deck, CreateDeck, Button } from "../components/componentsImport.js";
+import {
+  Deck,
+  CreateDeckForm,
+  Button,
+} from "../components/componentsImport.js";
 
 function Decks() {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5";
@@ -56,7 +60,7 @@ function Decks() {
         type="button"
         handleClick={handleNewDeckClick}
       />
-      {isCreatingDeck && <CreateDeck onCreate={handleCreateDeck} />}
+      {isCreatingDeck && <CreateDeckForm onCreate={handleCreateDeck} />}
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardItem, ReusableForm } from "../components/componentsImport.js";
+import {
+  CardItem,
+  CreateDeckForm,
+  ReusableForm,
+} from "../components/componentsImport.js";
 
 function Cards() {
   const { deckId } = useParams();
@@ -75,11 +79,12 @@ function Cards() {
       </button>
 
       {showForm && (
-        <ReusableForm
-          actionType="createCard"
-          fetchData={fetchCards}
-          closeForm={() => setShowForm(false)}
-        />
+        // <ReusableForm
+        //   actionType="createCard"
+        //   fetchData={fetchCards}
+        //   closeForm={() => setShowForm(false)}
+        // />
+        <CreateDeckForm />
       )}
 
       <div className="flex flex-col items-center gap-4">
