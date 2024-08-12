@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Deck, CreateDeck, Button } from "../components/index";
+import { Deck, CreateDeck, Button } from "../components/componentsImport.js";
 
 function Decks() {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5";

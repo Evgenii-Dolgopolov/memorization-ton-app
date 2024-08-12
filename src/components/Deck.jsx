@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "./Button/Button.jsx";
+import { Button, Input } from "./componentsImport.js";
 
 const Deck = ({ deck, fetchDecks }) => {
   const { id } = deck;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardItem, ReusableForm } from "../components/index";
+import { CardItem, ReusableForm } from "../components/componentsImport.js";
 
 function Cards() {
   const { deckId } = useParams();
@@ -19,12 +19,15 @@ function Cards() {
 
   const fetchCards = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/decks/${deckId}/cards`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/decks/${deckId}/cards`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
@@ -83,7 +86,7 @@ function Cards() {
         {cards.length === 0 ? (
           <p>No cards found.</p>
         ) : (
-          cards.map(card => (
+          cards.map((card) => (
             <CardItem
               key={card.id}
               id={card.id}
