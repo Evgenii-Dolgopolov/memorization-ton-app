@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReusableButtons from "./ReusableButtons.jsx";
+import Button from "./Button/Button.jsx";
 
 const CardItem = ({ id, question, answer, fetchCards }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -113,7 +113,7 @@ const CardItem = ({ id, question, answer, fetchCards }) => {
             {answer}
           </div>
 
-          <ReusableButtons
+          <Button
             id={id}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}

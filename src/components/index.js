@@ -2,7 +2,7 @@ import Menu from "./Menu.jsx"
 import CreateDeck from "./CreateDeck.jsx"
 import Deck from "./Deck.jsx"
 import CardItem from "./CardItem.jsx"
-import ReusableButtons from "./ReusableButtons.jsx"
+import Button from "./Button/Button.jsx"
 import ReusableForm from "./ReusableForm.jsx"
 
-export { Menu, CreateDeck, Deck, CardItem, ReusableButtons, ReusableForm }
+export { Menu, CreateDeck, Deck, CardItem, Button, ReusableForm }

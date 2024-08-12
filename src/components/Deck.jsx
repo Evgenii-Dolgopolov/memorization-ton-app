@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ReusableButtons from "./ReusableButtons.jsx";
+import Button from "./Button/Button.jsx";
 
 const Deck = ({ deck, fetchDecks }) => {
   const { id } = deck;
@@ -110,25 +110,45 @@ const Deck = ({ deck, fetchDecks }) => {
         </form>
       ) : (
         <>
-          <div className="font-bold text-lg px-4">{name}</div>
-          <div className="text-sm text-center px-4 max-w-full lg:max-w-md">
+          <h2 className="font-bold text-lg px-4">{name}</h2>
+          <p className="text-sm text-center px-4 max-w-full lg:max-w-md">
             {description}
-          </div>
+          </p>
 
-          <ReusableButtons
-            id={id}
-            onEditClick={handleEditClick}
-            onDeleteClick={handleDeleteClick}
-            editButtonLabel="Edit deck"
-            deleteButtonLabel="Delete deck"
-            additionalButton={
-              <Link to={`/decks/${id}/cards`}>
-                <button className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">
-                  Cards
-                </button>
-              </Link>
-            }
-          />
+          {/*<Button*/}
+          {/*  id={id}*/}
+          {/*  onEditClick={handleEditClick}*/}
+          {/*  onDeleteClick={handleDeleteClick}*/}
+          {/*  editButtonLabel="Edit deck"*/}
+          {/*  deleteButtonLabel="Delete deck"*/}
+          {/*  additionalButton={*/}
+          {/*    <Link to={`/decks/${id}/cards`}>*/}
+          {/*      <button className="text-xs px-4 py-2 bg-blue-400 rounded-3xl">*/}
+          {/*        Cards*/}
+          {/*      </button>*/}
+          {/*    </Link>*/}
+          {/*  }*/}
+          {/*/>*/}
+          <div className="flex gap-4">
+            <Button
+              className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
+              buttonName="Edit deck"
+              type="button"
+              handleClick={handleEditClick}
+            />
+            <Button
+              className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
+              buttonName="Delete deck"
+              type="button"
+              handleClick={handleDeleteClick}
+            />
+            <Button
+              className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
+              buttonName="Cards"
+              type="button"
+              // handleClick={}
+            />
+          </div>
         </>
       )}
     </div>
