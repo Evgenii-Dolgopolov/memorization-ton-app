@@ -84,12 +84,13 @@ const Deck = ({ deck, fetchDecks }) => {
           type="button"
           handleClick={handleDeleteClick}
         />
-        <Button
-          className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Cards"
-          type="button"
-          // handleClick={}
-        />
+        {/*<Button*/}
+        {/*  className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"*/}
+        {/*  buttonName="Cards"*/}
+        {/*  type="button"*/}
+        {/*  handleClick={}*/}
+        {/*/>*/}
+        <Link to={`/decks/${id}/cards`}>Cards</Link>
       </div>
     </div>
   );

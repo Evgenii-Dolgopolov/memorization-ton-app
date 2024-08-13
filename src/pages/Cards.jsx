@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  Button,
   CardItem,
   CreateDeckForm,
   ReusableForm,
 } from "../components/componentsImport.js";
+import CreateCardForm from "../components/CreateCardForm/CreateCardForm.jsx";
 
 function Cards() {
   const { deckId } = useParams();
@@ -70,13 +72,16 @@ function Cards() {
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
       <h1 className="text-center text-4xl font-bold">Your Cards</h1>
+      <Button
+        className="inline-flex justify-center px-4 py-2 border border-transparent
+        text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        buttonName="Add Card"
+        type="button"
+        handleClick={handleAddCardClick}
+      />
 
-      <button
-        onClick={handleAddCardClick}
-        className="self-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Add Card
-      </button>
+      <CreateCardForm />
 
       {showForm && (
         <ReusableForm
@@ -85,12 +90,11 @@ function Cards() {
           closeForm={() => setShowForm(false)}
         />
       )}
-
       <div className="flex flex-col items-center gap-4">
-        {cards.length === 0 ? (
+        {cards?.length === 0 ? (
           <p>No cards found.</p>
         ) : (
-          cards.map((card) => (
+          cards?.map((card) => (
             <CardItem
               key={card.id}
               id={card.id}
