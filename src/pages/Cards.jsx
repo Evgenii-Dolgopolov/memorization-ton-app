@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Button,
-  CardItem,
+  Card,
   CreateDeckForm,
   ReusableForm,
 } from "../components/componentsImport.js";
@@ -80,22 +80,15 @@ function Cards() {
         type="button"
         handleClick={handleAddCardClick}
       />
+      <Card />
 
-      <CreateCardForm />
-
-      {showForm && (
-        <ReusableForm
-          actionType="createCard"
-          fetchData={fetchCards}
-          closeForm={() => setShowForm(false)}
-        />
-      )}
+      {showForm && <CreateCardForm />}
       <div className="flex flex-col items-center gap-4">
         {cards?.length === 0 ? (
           <p>No cards found.</p>
         ) : (
           cards?.map((card) => (
-            <CardItem
+            <Card
               key={card.id}
               id={card.id}
               question={card.question}
