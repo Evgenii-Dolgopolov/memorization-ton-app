@@ -7,6 +7,9 @@ export default {
     "./src/**/*.{html,js,jsx,ts,tsx}", // Add paths to your template files
   ],
   theme: {
+    screens: {
+      sm: "576px",
+    },
     extend: {
       colors: {
         customColor: "#1a202c", // Add a custom color with the name 'customColor'

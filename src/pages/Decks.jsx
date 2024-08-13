@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Deck, CreateDeck } from "../components/index";
+import { useState, useEffect } from "react";
+import {
+  Deck,
+  CreateDeckForm,
+  Button,
+} from "../components/componentsImport.js";
+import Card from "../components/Card/Card.jsx";
 
 function Decks() {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5";
@@ -16,7 +21,7 @@ function Decks() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-          }
+          },
         }
       );
       if (!response.ok) {
@@ -50,12 +55,13 @@ function Decks() {
 
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
-      <button
-        onClick={handleNewDeckClick}
-        className="inline-flex justify-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        New Deck
-      </button>
-      {isCreatingDeck && <CreateDeck onCreate={handleCreateDeck} />}
+      <Button
+        buttonName="New Deck"
+        className="inline-flex justify-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        type="button"
+        handleClick={handleNewDeckClick}
+      />
+      {isCreatingDeck && <CreateDeckForm onCreate={handleCreateDeck} />}
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -64,7 +70,7 @@ function Decks() {
         decks
           .slice()
           .reverse()
-          .map(deck => (
+          .map((deck) => (
             <Deck
               key={deck.id}
               deck={deck}
@@ -72,12 +78,12 @@ function Decks() {
               buttonsConfig={{
                 edit: {
                   endpoint: `http://localhost:8080/decks/${deck.id}`,
-                  method: "PATCH"
+                  method: "PATCH",
                 },
                 delete: {
                   endpoint: `http://localhost:8080/decks/${deck.id}`,
-                  method: "DELETE"
-                }
+                  method: "DELETE",
+                },
               }}
             />
           ))
