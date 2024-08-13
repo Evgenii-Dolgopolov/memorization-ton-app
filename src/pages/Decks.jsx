@@ -4,6 +4,7 @@ import {
   CreateDeckForm,
   Button,
 } from "../components/componentsImport.js";
+import CardItem from "../components/CardItem.jsx";
 
 function Decks() {
   const userId = "3a06fc24-becf-482a-8098-91470ce047d5";

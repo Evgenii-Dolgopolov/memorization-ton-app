@@ -79,12 +79,11 @@ function Cards() {
       </button>
 
       {showForm && (
-        // <ReusableForm
-        //   actionType="createCard"
-        //   fetchData={fetchCards}
-        //   closeForm={() => setShowForm(false)}
-        // />
-        <CreateDeckForm />
+        <ReusableForm
+          actionType="createCard"
+          fetchData={fetchCards}
+          closeForm={() => setShowForm(false)}
+        />
       )}
 
       <div className="flex flex-col items-center gap-4">
