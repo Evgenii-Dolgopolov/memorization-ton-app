@@ -4,64 +4,51 @@ import {
   CreateDeckForm,
   Button,
 } from "../components/componentsImport.js";
-import Card from "../components/Card/Card.jsx";
+import { fetchDecks as fetchDecksApi } from "../utils/api.js";
+import { USER_ID as userId } from "../utils/constants.js";
 
 function Decks() {
-  const userId = "3a06fc24-becf-482a-8098-91470ce047d5";
   const [decks, setDecks] = useState([]);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchDecks = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch(
-        `http://localhost:8080/users/${userId}/decks`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const data = await response.json();
+      const data = await fetchDecksApi(userId);
       setDecks(data);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unknown error occurred");
-      }
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDecks();
+    setDecks(fetchDecks);
   }, [isCreatingDeck]);
 
   const handleNewDeckClick = () => {
-    setIsCreatingDeck(true);
+    setIsCreatingDeck(!isCreatingDeck);
   };
 
   const handleCreateDeck = () => {
     setIsCreatingDeck(false);
-    fetchDecks();
+    setDecks(fetchDecks);
   };
 
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
       <Button
         buttonName="New Deck"
-        className="inline-flex justify-center px-4 py-2 border border-transparent text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="inline-flex justify-center px-4 py-2 border border-transparent
+        text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         type="button"
         handleClick={handleNewDeckClick}
       />
-      {isCreatingDeck && <CreateDeckForm onCreate={handleCreateDeck} />}
+      {isCreatingDeck && <CreateDeckForm />}
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -70,23 +57,7 @@ function Decks() {
         decks
           .slice()
           .reverse()
-          .map((deck) => (
-            <Deck
-              key={deck.id}
-              deck={deck}
-              fetchDecks={fetchDecks}
-              buttonsConfig={{
-                edit: {
-                  endpoint: `http://localhost:8080/decks/${deck.id}`,
-                  method: "PATCH",
-                },
-                delete: {
-                  endpoint: `http://localhost:8080/decks/${deck.id}`,
-                  method: "DELETE",
-                },
-              }}
-            />
-          ))
+          .map((deck) => <Deck key={deck.id} deck={deck} />)
       )}
     </div>
   );

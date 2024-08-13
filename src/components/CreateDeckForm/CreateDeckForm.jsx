@@ -30,7 +30,7 @@ function CreateDeckForm({ fetchDecks }) {
 
       const data = await response.json();
       console.log("Deck created:", data);
-      fetchDecks();
+      // fetchDecks();
     } catch (error) {
       console.error("Error creating deck:", error);
       setError(error.message || "An unknown error occurred");

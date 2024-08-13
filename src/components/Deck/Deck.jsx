@@ -67,7 +67,10 @@ const Deck = ({ deck, fetchDecks }) => {
   return isEditing ? (
     <CreateDeckForm />
   ) : (
-    <div className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200 rounded-md shadow-md p-4 gap-4">
+    <li
+      className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200
+      rounded-md shadow-md p-4 gap-4"
+    >
       {error && <p className="text-red-500">{error}</p>}
       <h2 className="font-bold text-lg px-4">{name}</h2>
       <p className="text-sm text-center px-4 max-w-full lg:max-w-md">
@@ -94,7 +97,7 @@ const Deck = ({ deck, fetchDecks }) => {
         {/*/>*/}
         <Link to={`/decks/${id}/cards`}>Cards</Link>
       </div>
-    </div>
+    </li>
   );
 };
 

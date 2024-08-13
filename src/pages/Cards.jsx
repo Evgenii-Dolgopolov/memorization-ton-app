@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import {
   Button,
   Card,
+  CreateCardForm,
   CreateDeckForm,
   ReusableForm,
 } from "../components/componentsImport.js";
-import CreateCardForm from "../components/CreateCardForm/CreateCardForm.jsx";
 
 function Cards() {
   const { deckId } = useParams();
