@@ -65,10 +65,11 @@ function CreateCardForm({ id, question, answer, fetchCards }) {
         className="mt-4 flex items-center justify-center px-4 py-2 border border-transparent
         text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        buttonName={isLoading ? "Saving..." : "Save"}
         type="submit"
         // handleClick=
-      />
+      >
+        {isLoading ? "Saving..." : "Save"}
+      </Button>
     </form>
   );
 }

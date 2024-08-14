@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, CreateDeckForm, Input } from "../componentsImport.js";
+import React, { useEffect, useState } from "react";
+import { Button, DeckForm } from "../componentsImport.js";
+import { updateDeck, deleteDeck } from "../../utils/api.js";
 
-const Deck = ({ deck, fetchDecks }) => {
+function Deck({ deck, fetchDecks }) {
   const { id } = deck;
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
@@ -19,24 +19,8 @@ const Deck = ({ deck, fetchDecks }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/decks/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await updateDeck(id, name, description);
       console.log("Update successful:", data);
-      fetchDecks();
     } catch (error) {
       console.error("Error updating deck:", error);
       setError(error.message || "An unknown error occurred");
@@ -49,23 +33,21 @@ const Deck = ({ deck, fetchDecks }) => {
   const handleDeleteClick = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/decks/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      await fetchDecks(); // Refetch decks after a deck is deleted
+      await deleteDeck(id);
     } catch (error) {
       setError(error.message || "An unknown error occurred");
     }
   };
 
   return isEditing ? (
-    <CreateDeckForm />
+    <DeckForm
+      buttonName={isLoading ? "Editing..." : "Edit"}
+      handleSubmit={handleSaveClick}
+      deckName={name}
+      handleNameDeckChange={(e) => setName(e.target.value)}
+      description={description}
+      handleDeckDescriptionChange={(e) => setDescription(e.target.value)}
+    />
   ) : (
     <li
       className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200
@@ -79,25 +61,27 @@ const Deck = ({ deck, fetchDecks }) => {
       <div className="flex gap-4">
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Edit deck"
           type="button"
           onClick={handleEditClick}
-        />
+        >
+          Edit deck
+        </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Delete deck"
           type="button"
           onClick={handleDeleteClick}
-        />
+        >
+          Delete deck
+        </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Cards"
           to={`/decks/${id}/cards`}
-        />
-        {/*<Link to={`/decks/${id}/cards`}>Cards</Link>*/}
+        >
+          Cards
+        </Button>
       </div>
     </li>
   );
-};
+}
 
 export default Deck;

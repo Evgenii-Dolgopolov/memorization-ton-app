@@ -77,16 +77,18 @@ const Card = ({ id, question, answer, fetchCards }) => {
       <div className="flex gap-4">
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Edit card"
           type="button"
           onClick={handleEditClick}
-        />
+        >
+          Edit card
+        </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Delete card"
           type="submit"
           onClick={handleDeleteClick}
-        />
+        >
+          Delete card
+        </Button>
       </div>
     </div>
   );
