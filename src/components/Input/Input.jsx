@@ -6,6 +6,7 @@ function Input({
   handleChange,
   maxLength,
   type,
+  // required,
   textarea,
 }) {
   const CustomTag = textarea ? `textarea` : `input`;
@@ -24,7 +25,7 @@ function Input({
         maxLength={maxLength}
         type={type}
         // TODO: разобраться с required
-        // required
+        // required={required}
       />
     </label>
   );

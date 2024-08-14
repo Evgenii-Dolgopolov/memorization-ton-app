@@ -7,9 +7,14 @@ function DeckForm({
   deckName,
   description,
   handleDeckDescriptionChange,
+  error,
 }) {
   return (
-    <form>
+    <form
+      className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200
+      rounded-md shadow-md p-4 gap-4"
+    >
+      {error}
       <Input
         id="deck-name"
         name="deckName"
@@ -18,6 +23,7 @@ function DeckForm({
         handleChange={handleNameDeckChange}
         maxLength={100}
         type="text"
+        // required={true}
       />
       <Input
         id="deck-description"
@@ -27,6 +33,7 @@ function DeckForm({
         handleChange={handleDeckDescriptionChange}
         maxLength={300}
         type="text"
+        // required={true}
         textarea
       />
       <Button

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, DeckForm } from "../componentsImport.js";
 import { updateDeck, deleteDeck } from "../../utils/api.js";
+import { UPDATE_SUCCESSFUL_MESSAGE } from "../../utils/constants.js";
 
-function Deck({ deck, fetchDecks }) {
+function Deck({ deck, onDeleteClick }) {
   const { id } = deck;
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
@@ -17,31 +18,27 @@ function Deck({ deck, fetchDecks }) {
   const handleSaveClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const data = await updateDeck(id, name, description);
-      console.log("Update successful:", data);
-    } catch (error) {
-      console.error("Error updating deck:", error);
-      setError(error.message || "An unknown error occurred");
+      console.log(UPDATE_SUCCESSFUL_MESSAGE, data);
     } finally {
       setIsLoading(false);
       setIsEditing(false);
     }
   };
 
-  const handleDeleteClick = async (event) => {
-    event.preventDefault();
+  const handleDeleteClick = async (e) => {
+    e.preventDefault();
     try {
       await deleteDeck(id);
-    } catch (error) {
-      setError(error.message || "An unknown error occurred");
+      onDeleteClick(id);
+    } finally {
     }
   };
 
   return isEditing ? (
     <DeckForm
-      buttonName={isLoading ? "Editing..." : "Edit"}
+      buttonName={isLoading ? "Saving..." : "Save"}
       handleSubmit={handleSaveClick}
       deckName={name}
       handleNameDeckChange={(e) => setName(e.target.value)}
