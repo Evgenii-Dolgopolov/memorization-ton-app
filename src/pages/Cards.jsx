@@ -78,7 +78,7 @@ function Cards() {
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         buttonName="Add Card"
         type="button"
-        handleClick={handleAddCardClick}
+        onClick={handleAddCardClick}
       />
       <Card />
 

@@ -46,7 +46,7 @@ function Decks() {
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         type="button"
-        handleClick={handleNewDeckClick}
+        onClick={handleNewDeckClick}
       />
       {isCreatingDeck && <CreateDeckForm />}
       {isLoading ? (

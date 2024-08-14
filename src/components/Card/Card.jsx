@@ -79,13 +79,13 @@ const Card = ({ id, question, answer, fetchCards }) => {
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
           buttonName="Edit card"
           type="button"
-          handleClick={handleEditClick}
+          onClick={handleEditClick}
         />
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
           buttonName="Delete card"
           type="submit"
-          handleClick={handleDeleteClick}
+          onClick={handleDeleteClick}
         />
       </div>
     </div>

@@ -1,8 +1,12 @@
-function Button({ className, buttonName, type, handleClick }) {
+import { Link } from "react-router-dom";
+
+function Button({ className, buttonName, ...attrs }) {
+  const Tag = attrs.to ? Link : "button";
+
   return (
-    <button className={`${className}`} type={type} onClick={handleClick}>
+    <Tag {...attrs} className={`${className}`}>
       {buttonName}
-    </button>
+    </Tag>
   );
 }
 

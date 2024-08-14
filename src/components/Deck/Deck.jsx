@@ -81,21 +81,20 @@ const Deck = ({ deck, fetchDecks }) => {
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
           buttonName="Edit deck"
           type="button"
-          handleClick={handleEditClick}
+          onClick={handleEditClick}
         />
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
           buttonName="Delete deck"
           type="button"
-          handleClick={handleDeleteClick}
+          onClick={handleDeleteClick}
         />
-        {/*<Button*/}
-        {/*  className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"*/}
-        {/*  buttonName="Cards"*/}
-        {/*  type="button"*/}
-        {/*  handleClick={}*/}
-        {/*/>*/}
-        <Link to={`/decks/${id}/cards`}>Cards</Link>
+        <Button
+          className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
+          buttonName="Cards"
+          to={`/decks/${id}/cards`}
+        />
+        {/*<Link to={`/decks/${id}/cards`}>Cards</Link>*/}
       </div>
     </li>
   );
