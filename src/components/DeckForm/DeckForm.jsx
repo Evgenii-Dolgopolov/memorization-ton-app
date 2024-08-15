@@ -14,7 +14,7 @@ function DeckForm({
       className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200
       rounded-md shadow-md p-4 gap-4"
     >
-      {error}
+      {error && <p className="text-red-500">{error}</p>}
       <Input
         id="deck-name"
         name="deckName"

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Deck, Button, DeckForm } from "../components/componentsImport.js";
-import { createDeck, fetchDecks as fetchDecksApi } from "../utils/api.js";
+import { createDeck, fetchDecks } from "../utils/api.js";
 import { USER_ID as userId, DECK_CREATED_MESSAGE } from "../utils/constants.js";
 
 function Decks() {
@@ -12,23 +12,9 @@ function Decks() {
   const [deckName, setDeckName] = useState("");
   const [description, setDescription] = useState("");
 
-  // const fetchDecks = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const data = await fetchDecksApi(userId);
-  //     setDecks(data);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchDecks();
-  // }, [isCreatingDeck]);
-
   useEffect(() => {
     setIsLoading(true);
-    fetchDecksApi(userId)
+    fetchDecks(userId)
       .then((data) => {
         setDecks(data);
       })
@@ -44,37 +30,20 @@ function Decks() {
     setIsCreatingDeck(!isCreatingDeck);
   };
 
-  // const handleCreateDeck = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   try {
-  //     const data = await createDeck(deckName, description, userId);
-  //     console.log(DECK_CREATED_MESSAGE, data);
-  //   } finally {
-  //     setIsLoading(false);
-  //     setIsCreatingDeck(false);
-  //     setDeckName("");
-  //     setDescription("");
-  //   }
-  // };
-
-  const handleCreateDeck = (e) => {
+  const handleCreateDeck = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    createDeck(deckName, description, userId)
-      .then((data) => {
-        console.log(DECK_CREATED_MESSAGE, data);
-        setDeckName("");
-        setDescription("");
-        setIsCreatingDeck(false);
-      })
-      .catch((error) => {
-        console.error("Error creating deck:", error);
-        setCreateDeckError(error.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const data = await createDeck(deckName, description, userId);
+      console.log(DECK_CREATED_MESSAGE, data);
+      setDeckName("");
+      setDescription("");
+      setIsCreatingDeck(false);
+    } catch (error) {
+      setCreateDeckError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDeckDelete = (deletedDeckId) => {
@@ -108,7 +77,7 @@ function Decks() {
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error}</p>
+        <p className="text-red-500">{error}</p>
       ) : (
         <ul className="flex flex-col gap-6">
           {decks

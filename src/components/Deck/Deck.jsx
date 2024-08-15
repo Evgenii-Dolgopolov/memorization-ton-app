@@ -9,6 +9,7 @@ function Deck({ deck, onDeleteClick }) {
   const [description, setDescription] = useState(deck.description);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
 
   const handleEditClick = () => {
@@ -17,22 +18,26 @@ function Deck({ deck, onDeleteClick }) {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     try {
       const data = await updateDeck(id, name, description);
       console.log(UPDATE_SUCCESSFUL_MESSAGE, data);
+    } catch (error) {
+      setError(error.message);
     } finally {
-      setIsLoading(false);
       setIsEditing(false);
     }
   };
 
   const handleDeleteClick = async (e) => {
     e.preventDefault();
+    setIsDeleting(true);
     try {
       await deleteDeck(id);
       onDeleteClick(id);
+    } catch (error) {
+      setError(error.message);
     } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -51,6 +56,7 @@ function Deck({ deck, onDeleteClick }) {
       rounded-md shadow-md p-4 gap-4"
     >
       {error && <p className="text-red-500">{error}</p>}
+      {isDeleting && <p>Deleting deck...</p>}
       <h2 className="font-bold text-lg px-4">{name}</h2>
       <p className="text-sm text-center px-4 max-w-full lg:max-w-md">
         {description}
