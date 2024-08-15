@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CreateCardForm,
-  ReusableForm,
-} from "../components/componentsImport.js";
+import { Button, Card, CardForm } from "../components/componentsImport.js";
 
 function Cards() {
   const { deckId } = useParams();
@@ -57,7 +52,7 @@ function Cards() {
   }, [deckId]);
 
   const handleAddCardClick = () => {
-    setShowForm(true);
+    setShowForm(!showForm);
   };
 
   if (isLoading) {
@@ -75,13 +70,14 @@ function Cards() {
         className="inline-flex justify-center px-4 py-2 border border-transparent
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        buttonName="Add Card"
         type="button"
         onClick={handleAddCardClick}
-      />
+      >
+        Add Card
+      </Button>
       <Card />
 
-      {showForm && <CreateCardForm />}
+      {showForm && <CardForm />}
       <div className="flex flex-col items-center gap-4">
         {cards?.length === 0 ? (
           <p>No cards found.</p>

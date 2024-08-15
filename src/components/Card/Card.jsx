@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../componentsImport.js";
-import CreateCardForm from "../CreateCardForm/CreateCardForm.jsx";
+import CardForm from "../CardForm/CardForm.jsx";
 
 const Card = ({ id, question, answer, fetchCards }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -9,6 +9,37 @@ const Card = ({ id, question, answer, fetchCards }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // const handleSaveClick = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //
+  //   try {
+  //     const response = await fetch(`http://localhost:8080/cards/${id}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         question: newQuestion,
+  //         answer: newAnswer,
+  //       }),
+  //     });
+  //
+  //     if (!response.ok) {
+  //       throw new Error(`Error: ${response.status}`);
+  //     }
+  //
+  //     const data = await response.json();
+  //     console.log("Update successful:", data);
+  //     await fetchCards();
+  //   } catch (error) {
+  //     console.error("Error updating card:", error);
+  //     setError(error.message || "An unknown error occurred");
+  //   } finally {
+  //     setIsLoading(false);
+  //     setIsEditing(false);
+  //   }
+  // };
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -64,7 +95,7 @@ const Card = ({ id, question, answer, fetchCards }) => {
   };
 
   return isEditing ? (
-    <CreateCardForm />
+    <CardForm />
   ) : (
     <div
       className="flex flex-col items-center justify-center w-full min-h-36 bg-blue-200
