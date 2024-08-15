@@ -64,14 +64,14 @@ function Deck({ deck, onDeleteClick }) {
       <div className="flex gap-4">
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          type="button"
+          type="submit"
           onClick={handleEditClick}
         >
           Edit deck
         </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          type="button"
+          type="submit"
           onClick={handleDeleteClick}
         >
           Delete deck
