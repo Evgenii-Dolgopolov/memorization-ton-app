@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, CardForm } from "../components/componentsImport.js";
 
@@ -7,7 +7,20 @@ function Cards() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [createCardError, setCreateCardError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+
+  const handleAddCardClick = () => {
+    setShowForm(!showForm);
+  };
+
+  const handleCardDelete = (deletedCardId) => {
+    setCards((prevCards) =>
+      prevCards.filter((card) => card.id !== deletedCardId)
+    );
+  };
 
   const transformData = (data) => {
     return data.map((item) => ({
@@ -51,10 +64,6 @@ function Cards() {
     fetchCards();
   }, [deckId]);
 
-  const handleAddCardClick = () => {
-    setShowForm(!showForm);
-  };
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -62,6 +71,17 @@ function Cards() {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
+  const handleCreateCard = async (e) => {
+    e.preventDefault();
+    try {
+      console.log("lol");
+    } catch (error) {
+      setCreateCardError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
@@ -75,24 +95,38 @@ function Cards() {
       >
         Add Card
       </Button>
-      <Card />
-
-      {showForm && <CardForm />}
-      <div className="flex flex-col items-center gap-4">
-        {cards?.length === 0 ? (
-          <p>No cards found.</p>
-        ) : (
-          cards?.map((card) => (
-            <Card
-              key={card.id}
-              id={card.id}
-              question={card.question}
-              answer={card.answer}
-              fetchCards={fetchCards}
-            />
-          ))
-        )}
-      </div>
+      {showForm && (
+        <CardForm
+          buttonName={isLoading ? "Creating..." : "Create Card"}
+          question={question}
+          handleQuestionChange={(e) => setQuestion(e.target.value)}
+          answer={answer}
+          handleAnswerChange={(e) => setAnswer(e.target.value)}
+          handleSubmit={handleCreateCard}
+          error={createCardError}
+        />
+      )}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : cards.length === 0 ? (
+        <p>No cards found.</p>
+      ) : (
+        <ul className="flex flex-col items-center gap-4">
+          {cards
+            .slice()
+            .reverse()
+            .map((card) => (
+              <Card
+                key={card.id}
+                id={card.id}
+                card={card}
+                onDeleteClick={handleCardDelete}
+              />
+            ))}
+        </ul>
+      )}
     </div>
   );
 }

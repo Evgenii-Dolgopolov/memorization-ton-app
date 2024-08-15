@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "../componentsImport.js";
-import CardForm from "../CardForm/CardForm.jsx";
+import { Button, CardForm } from "../componentsImport.js";
 
 const Card = ({ id, question, answer, fetchCards }) => {
   const [isEditing, setIsEditing] = useState(false);

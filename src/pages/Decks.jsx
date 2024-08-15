@@ -78,6 +78,8 @@ function Decks() {
         <p>Loading...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
+      ) : decks.length === 0 ? (
+        <p>No decks found.</p>
       ) : (
         <ul className="flex flex-col gap-6">
           {decks
