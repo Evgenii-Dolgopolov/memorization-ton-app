@@ -8,7 +8,7 @@ import {
   DECK_NOT_FOUND_ERROR,
   UPDATE_DECK_ERROR,
   DELETE_DECK_ERROR,
-} from "./constants.js";
+} from "../utils/constants.js";
 
 // Get all decks
 export const fetchDecks = async (userId) => {
@@ -29,17 +29,6 @@ export const fetchDecks = async (userId) => {
       throw new Error(UNKNOWN_ERROR);
     }
   }
-  //  Switch variant
-  // if (!response.ok) {
-  //   switch (response.status) {
-  //     case 400:
-  //       throw new Error(INVALID_USER_ID_ERROR);
-  //     case 500:
-  //       throw new Error(FETCH_DECKS_ERROR);
-  //     default:
-  //       throw new Error(UNKNOWN_ERROR);
-  //   }
-  // }
   return response.json();
 };
 
