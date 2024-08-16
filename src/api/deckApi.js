@@ -48,7 +48,7 @@ export const createDeck = async (deckName, description, userId) => {
   });
 
   if (!response.ok) {
-    if (response.status === 400 || 500) {
+    if (response.status === 400 || response.status === 500) {
       throw new Error(CREATE_DECK_ERROR);
     } else {
       throw new Error(UNKNOWN_ERROR);
