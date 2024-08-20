@@ -65,6 +65,7 @@ export const createCard = async (question, answer, deckId) => {
 export const updateCard = async (id, question, answer) => {
   const response = await fetch(`${BASE_URL}/cards/${id}`, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
