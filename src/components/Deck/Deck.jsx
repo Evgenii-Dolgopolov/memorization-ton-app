@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, DeckForm } from "../componentsImport.js";
-import { updateDeck, deleteDeck } from "../../utils/api.js";
-import { UPDATE_SUCCESSFUL_MESSAGE } from "../../utils/constants.js";
+import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 
 function Deck({ deck, onDeleteClick }) {
   const { id } = deck;
@@ -18,13 +17,14 @@ function Deck({ deck, onDeleteClick }) {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      const data = await updateDeck(id, name, description);
-      console.log(UPDATE_SUCCESSFUL_MESSAGE, data);
+      await updateDeck(id, name, description);
     } catch (error) {
       setError(error.message);
     } finally {
       setIsEditing(false);
+      setIsLoading(false);
     }
   };
 

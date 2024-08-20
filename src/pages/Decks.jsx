@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Deck, Button, DeckForm } from "../components/componentsImport.js";
-import { createDeck, fetchDecks } from "../utils/api.js";
-import { USER_ID as userId, DECK_CREATED_MESSAGE } from "../utils/constants.js";
+import { createDeck, fetchDecks } from "../api/deckApi.js";
+import { USER_ID as userId } from "../utils/constants.js";
 
 function Decks() {
   const [decks, setDecks] = useState([]);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [createDeckError, setCreateDeckError] = useState(null);
   const [deckName, setDeckName] = useState("");
@@ -35,7 +35,6 @@ function Decks() {
     setIsLoading(true);
     try {
       const data = await createDeck(deckName, description, userId);
-      console.log(DECK_CREATED_MESSAGE, data);
       setDeckName("");
       setDescription("");
       setIsCreatingDeck(false);
@@ -82,16 +81,9 @@ function Decks() {
         <p>No decks found.</p>
       ) : (
         <ul className="flex flex-col gap-6">
-          {decks
-            .slice()
-            .reverse()
-            .map((deck) => (
-              <Deck
-                key={deck.id}
-                deck={deck}
-                onDeleteClick={handleDeckDelete}
-              />
-            ))}
+          {decks.toReversed().map((deck) => (
+            <Deck key={deck.id} deck={deck} onDeleteClick={handleDeckDelete} />
+          ))}
         </ul>
       )}
     </div>

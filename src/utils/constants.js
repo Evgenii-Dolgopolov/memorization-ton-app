@@ -24,4 +24,3 @@ export const DELETE_CARD_ERROR = "Failed to delete card";
 export const DECK_CREATED_MESSAGE = "Deck created:";
 export const UPDATE_SUCCESSFUL_MESSAGE = "Update successful:";
 export const CARD_CREATED_MESSAGE = "Card created:";
-export const CARD_DELETED_MESSAGE = "Card deleted successfully";
