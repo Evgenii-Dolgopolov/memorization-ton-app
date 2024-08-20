@@ -5,7 +5,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import "../../index.css";
-import { Decks, Play, Statistics, Settings, Cards } from "../../pages/index.js";
+import {
+  Decks,
+  Play,
+  Statistics,
+  Settings,
+  Cards,
+} from "../../pages/pagesImport.js";
 import { Menu } from "../componentsImport.js";
 
 function App() {

@@ -1,75 +1,60 @@
-import React, { useState } from "react";
-import { Button } from "../componentsImport.js";
-import CreateCardForm from "../CreateCardForm/CreateCardForm.jsx";
+import { useState } from "react";
+import { Button, CardForm } from "../componentsImport.js";
+import { deleteCard, updateCard } from "../../api/cardApi.js";
 
-const Card = ({ id, question, answer, fetchCards }) => {
+function Card({ card, onDeleteClick }) {
+  const { id } = card;
   const [isEditing, setIsEditing] = useState(false);
-  const [newQuestion, setNewQuestion] = useState(question);
-  const [newAnswer, setNewAnswer] = useState(answer);
+  const [question, setQuestion] = useState(card.question);
+  const [answer, setAnswer] = useState(card.answer);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
   const handleSaveClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const response = await fetch(`http://localhost:8080/cards/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: newQuestion,
-          answer: newAnswer,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Update successful:", data);
-      await fetchCards();
+      await updateCard(id, question, answer);
     } catch (error) {
-      console.error("Error updating card:", error);
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
     } finally {
-      setIsLoading(false);
       setIsEditing(false);
+      setIsLoading(false);
     }
   };
 
-  const handleDeleteClick = async (event) => {
-    event.preventDefault();
+  const handleDeleteClick = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/cards/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      await fetchCards(); // Refetch cards after a card is deleted
+      await deleteCard(id);
+      onDeleteClick(id);
     } catch (error) {
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return isEditing ? (
-    <CreateCardForm />
+    <CardForm
+      buttonName={isLoading ? "Saving..." : "Save"}
+      handleSubmit={handleSaveClick}
+      question={question}
+      handleQuestionChange={(e) => setQuestion(e.target.value)}
+      answer={answer}
+      handleAnswerChange={(e) => setAnswer(e.target.value)}
+    />
   ) : (
-    <div
+    <li
       className="flex flex-col items-center justify-center w-full min-h-36 bg-blue-200
       rounded-md shadow-md p-4 gap-4"
     >
+      {error && <p className="text-red-500">{error}</p>}
+      {isDeleting && <p>Deleting deck...</p>}
       <h2 className="font-bold text-lg px-4">{question}</h2>
       <p className="text-sm text-center px-4 max-w-full lg:max-w-md">
         {answer}
@@ -77,19 +62,21 @@ const Card = ({ id, question, answer, fetchCards }) => {
       <div className="flex gap-4">
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Edit card"
-          type="button"
-          handleClick={handleEditClick}
-        />
+          type="submit"
+          onClick={handleEditClick}
+        >
+          Edit card
+        </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Delete card"
           type="submit"
-          handleClick={handleDeleteClick}
-        />
+          onClick={handleDeleteClick}
+        >
+          Delete card
+        </Button>
       </div>
-    </div>
+    </li>
   );
-};
+}
 
 export default Card;

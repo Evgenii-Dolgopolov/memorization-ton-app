@@ -1,103 +1,93 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CreateDeckForm,
-  ReusableForm,
-} from "../components/componentsImport.js";
-import CreateCardForm from "../components/CreateCardForm/CreateCardForm.jsx";
+import { Button, Card, CardForm } from "../components/componentsImport.js";
+import { createCard, fetchCards } from "../api/cardApi.js";
 
 function Cards() {
   const { deckId } = useParams();
   const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+  const [createCardError, setCreateCardError] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
-  const transformData = (data) => {
-    return data.map((item) => ({
-      id: item.ID,
-      question: item.Question,
-      answer: item.Answer,
-    }));
+  useEffect(() => {
+    setIsLoading(true);
+    fetchCards(deckId)
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((error) => {
+        setError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [deckId, isCreatingCard]);
+
+  const handleAddCardClick = () => {
+    setIsCreatingCard(!isCreatingCard);
   };
 
-  const fetchCards = async () => {
+  const handleCreateCard = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const response = await fetch(
-        `http://localhost:8080/decks/${deckId}/cards`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const formattedData = transformData(data);
-      setCards(formattedData);
+      await createCard(question, answer, deckId);
+      setQuestion("");
+      setAnswer("");
+      setIsCreatingCard(false);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unknown error occurred");
-      }
+      setCreateCardError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchCards();
-  }, [deckId]);
-
-  const handleAddCardClick = () => {
-    setShowForm(true);
+  const handleCardDelete = (deletedCardId) => {
+    setCards((prevCards) =>
+      prevCards.filter((card) => card.id !== deletedCardId)
+    );
   };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
 
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
-      <h1 className="text-center text-4xl font-bold">Your Cards</h1>
+      <h1 className="text-center text-4xl font-bold">Your cards</h1>
       <Button
         className="inline-flex justify-center px-4 py-2 border border-transparent
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        buttonName="Add Card"
         type="button"
-        handleClick={handleAddCardClick}
-      />
-      <Card />
-
-      {showForm && <CreateCardForm />}
-      <div className="flex flex-col items-center gap-4">
-        {cards?.length === 0 ? (
-          <p>No cards found.</p>
-        ) : (
-          cards?.map((card) => (
-            <Card
-              key={card.id}
-              id={card.id}
-              question={card.question}
-              answer={card.answer}
-              fetchCards={fetchCards}
-            />
-          ))
-        )}
-      </div>
+        onClick={handleAddCardClick}
+      >
+        Add Card
+      </Button>
+      {isCreatingCard && (
+        <CardForm
+          buttonName={isLoading ? "Creating..." : "Create Card"}
+          question={question}
+          handleQuestionChange={(e) => setQuestion(e.target.value)}
+          answer={answer}
+          handleAnswerChange={(e) => setAnswer(e.target.value)}
+          handleSubmit={handleCreateCard}
+          error={createCardError}
+        />
+      )}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : cards.length === 0 ? (
+        <p>No cards found.</p>
+      ) : (
+        <ul className="flex flex-col items-center gap-4">
+          {cards.toReversed().map((card) => (
+            <Card key={card.id} card={card} onDeleteClick={handleCardDelete} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

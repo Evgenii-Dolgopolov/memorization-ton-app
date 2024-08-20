@@ -1,9 +1,9 @@
-function Button({ className, buttonName, type, handleClick }) {
-  return (
-    <button className={`${className}`} type={type} onClick={handleClick}>
-      {buttonName}
-    </button>
-  );
+import { Link } from "react-router-dom";
+
+function Button({ className, ...attrs }) {
+  const Tag = attrs.to ? Link : "button";
+
+  return <Tag {...attrs} className={`${className}`}></Tag>;
 }
 
 export default Button;

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, CreateDeckForm, Input } from "../componentsImport.js";
+import { useState } from "react";
+import { Button, DeckForm } from "../componentsImport.js";
+import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 
-const Deck = ({ deck, fetchDecks }) => {
+function Deck({ deck, onDeleteClick }) {
   const { id } = deck;
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
 
   const handleEditClick = () => {
@@ -17,58 +18,45 @@ const Deck = ({ deck, fetchDecks }) => {
   const handleSaveClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const response = await fetch(`http://localhost:8080/decks/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Update successful:", data);
-      fetchDecks();
+      await updateDeck(id, name, description);
     } catch (error) {
-      console.error("Error updating deck:", error);
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
     } finally {
-      setIsLoading(false);
       setIsEditing(false);
+      setIsLoading(false);
     }
   };
 
-  const handleDeleteClick = async (event) => {
-    event.preventDefault();
+  const handleDeleteClick = async (e) => {
+    e.preventDefault();
+    setIsDeleting(true);
     try {
-      const response = await fetch(`http://localhost:8080/decks/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      await fetchDecks(); // Refetch decks after a deck is deleted
+      await deleteDeck(id);
+      onDeleteClick(id);
     } catch (error) {
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return isEditing ? (
-    <CreateDeckForm />
+    <DeckForm
+      buttonName={isLoading ? "Saving..." : "Save"}
+      handleSubmit={handleSaveClick}
+      deckName={name}
+      handleNameDeckChange={(e) => setName(e.target.value)}
+      description={description}
+      handleDeckDescriptionChange={(e) => setDescription(e.target.value)}
+    />
   ) : (
-    <div className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200 rounded-md shadow-md p-4 gap-4">
+    <li
+      className="flex flex-col items-center justify-center w-full min-h-36 bg-yellow-200
+      rounded-md shadow-md p-4 gap-4"
+    >
       {error && <p className="text-red-500">{error}</p>}
+      {isDeleting && <p>Deleting deck...</p>}
       <h2 className="font-bold text-lg px-4">{name}</h2>
       <p className="text-sm text-center px-4 max-w-full lg:max-w-md">
         {description}
@@ -76,26 +64,27 @@ const Deck = ({ deck, fetchDecks }) => {
       <div className="flex gap-4">
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Edit deck"
-          type="button"
-          handleClick={handleEditClick}
-        />
+          type="submit"
+          onClick={handleEditClick}
+        >
+          Edit deck
+        </Button>
         <Button
           className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-          buttonName="Delete deck"
-          type="button"
-          handleClick={handleDeleteClick}
-        />
-        {/*<Button*/}
-        {/*  className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"*/}
-        {/*  buttonName="Cards"*/}
-        {/*  type="button"*/}
-        {/*  handleClick={}*/}
-        {/*/>*/}
-        <Link to={`/decks/${id}/cards`}>Cards</Link>
+          type="submit"
+          onClick={handleDeleteClick}
+        >
+          Delete deck
+        </Button>
+        <Button
+          className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
+          to={`/decks/${id}/cards`}
+        >
+          Cards
+        </Button>
       </div>
-    </div>
+    </li>
   );
-};
+}
 
 export default Deck;
