@@ -34,7 +34,7 @@ function Decks() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const data = await createDeck(deckName, description, userId);
+      await createDeck(deckName, description, userId);
       setDeckName("");
       setDescription("");
       setIsCreatingDeck(false);

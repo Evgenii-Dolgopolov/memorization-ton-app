@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, CardForm } from "../componentsImport.js";
+import { deleteCard, updateCard } from "../../api/cardApi.js";
 
-const Card = ({ id, question, answer, fetchCards }) => {
+function Card({ card, onDeleteClick }) {
+  const { id } = card;
   const [isEditing, setIsEditing] = useState(false);
-  const [newQuestion, setNewQuestion] = useState(question);
-  const [newAnswer, setNewAnswer] = useState(answer);
+  const [question, setQuestion] = useState(card.question);
+  const [answer, setAnswer] = useState(card.answer);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
@@ -12,54 +14,28 @@ const Card = ({ id, question, answer, fetchCards }) => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
   const handleSaveClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const response = await fetch(`http://localhost:8080/cards/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: newQuestion,
-          answer: newAnswer,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Update successful:", data);
-      await fetchCards();
+      await updateCard(id, question, answer);
     } catch (error) {
-      console.error("Error updating card:", error);
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
     } finally {
-      setIsLoading(false);
       setIsEditing(false);
+      setIsLoading(false);
     }
   };
 
-  const handleDeleteClick = async (event) => {
-    event.preventDefault();
+  const handleDeleteClick = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/cards/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      await fetchCards(); // Refetch cards after a card is deleted
+      await deleteCard(id);
+      onDeleteClick(id);
     } catch (error) {
-      setError(error.message || "An unknown error occurred");
+      setError(error.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -67,10 +43,10 @@ const Card = ({ id, question, answer, fetchCards }) => {
     <CardForm
       buttonName={isLoading ? "Saving..." : "Save"}
       handleSubmit={handleSaveClick}
-      question={newQuestion}
-      handleNameDeckChange={(e) => setNewQuestion(e.target.value)}
-      answer={newAnswer}
-      handleDeckDescriptionChange={(e) => setNewAnswer(e.target.value)}
+      question={question}
+      handleQuestionChange={(e) => setQuestion(e.target.value)}
+      answer={answer}
+      handleAnswerChange={(e) => setAnswer(e.target.value)}
     />
   ) : (
     <li
@@ -101,6 +77,6 @@ const Card = ({ id, question, answer, fetchCards }) => {
       </div>
     </li>
   );
-};
+}
 
 export default Card;

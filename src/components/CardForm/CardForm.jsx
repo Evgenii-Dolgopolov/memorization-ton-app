@@ -13,6 +13,7 @@ function CardForm({
     <form
       className="flex flex-col items-center justify-center w-full min-h-36 bg-blue-200
       rounded-md shadow-md p-4 gap-4"
+      onSubmit={handleSubmit}
     >
       {error && <p className="text-red-500">{error}</p>}
       <Input
@@ -40,7 +41,7 @@ function CardForm({
         bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
         focus:ring-offset-2 focus:ring-indigo-500"
         type="submit"
-        onClick={handleSubmit}
+        // onClick={handleSubmit}
       >
         {buttonName}
       </Button>

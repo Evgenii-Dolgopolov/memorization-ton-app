@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, DeckForm } from "../componentsImport.js";
 import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 

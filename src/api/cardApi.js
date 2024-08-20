@@ -30,7 +30,8 @@ export const fetchCards = async (deckId) => {
         throw new Error(UNKNOWN_ERROR);
     }
   }
-  return response.json();
+  const json = await response.json();
+  return json.data;
 };
 
 // Create card
@@ -84,6 +85,7 @@ export const updateCard = async (id, question, answer) => {
         throw new Error(UNKNOWN_ERROR);
     }
   }
+  return await response.json();
 };
 
 // Delete card

@@ -1,19 +1,49 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, CardForm } from "../components/componentsImport.js";
+import { createCard, fetchCards } from "../api/cardApi.js";
 
 function Cards() {
   const { deckId } = useParams();
   const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [createCardError, setCreateCardError] = useState(null);
-  const [showForm, setShowForm] = useState(false);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
+  useEffect(() => {
+    setIsLoading(true);
+    fetchCards(deckId)
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((error) => {
+        setError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [deckId, isCreatingCard]);
+
   const handleAddCardClick = () => {
-    setShowForm(!showForm);
+    setIsCreatingCard(!isCreatingCard);
+  };
+
+  const handleCreateCard = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await createCard(question, answer, deckId);
+      setQuestion("");
+      setAnswer("");
+      setIsCreatingCard(false);
+    } catch (error) {
+      setCreateCardError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCardDelete = (deletedCardId) => {
@@ -22,70 +52,9 @@ function Cards() {
     );
   };
 
-  const transformData = (data) => {
-    return data.map((item) => ({
-      id: item.ID,
-      question: item.Question,
-      answer: item.Answer,
-    }));
-  };
-
-  const fetchCards = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/decks/${deckId}/cards`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const formattedData = transformData(data);
-      setCards(formattedData);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unknown error occurred");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCards();
-  }, [deckId]);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  const handleCreateCard = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("lol");
-    } catch (error) {
-      setCreateCardError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
-      <h1 className="text-center text-4xl font-bold">Your Cards</h1>
+      <h1 className="text-center text-4xl font-bold">Your cards</h1>
       <Button
         className="inline-flex justify-center px-4 py-2 border border-transparent
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
@@ -95,7 +64,7 @@ function Cards() {
       >
         Add Card
       </Button>
-      {showForm && (
+      {isCreatingCard && (
         <CardForm
           buttonName={isLoading ? "Creating..." : "Create Card"}
           question={question}
@@ -114,17 +83,9 @@ function Cards() {
         <p>No cards found.</p>
       ) : (
         <ul className="flex flex-col items-center gap-4">
-          {cards
-            .slice()
-            .reverse()
-            .map((card) => (
-              <Card
-                key={card.id}
-                id={card.id}
-                card={card}
-                onDeleteClick={handleCardDelete}
-              />
-            ))}
+          {cards.toReversed().map((card) => (
+            <Card key={card.id} card={card} onDeleteClick={handleCardDelete} />
+          ))}
         </ul>
       )}
     </div>
