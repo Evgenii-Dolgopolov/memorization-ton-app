@@ -79,12 +79,12 @@ function Cards() {
         <p>Loading...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
-      ) : cards.length === 0 ? (
+      ) : cards?.length === 0 ? (
         <p>No cards found.</p>
       ) : (
         <ul className="flex flex-col items-center gap-4">
-          {cards.toReversed().map((card) => (
-            <Card key={card.id} card={card} onDeleteClick={handleCardDelete} />
+          {cards?.toReversed().map((card, i) => (
+            <Card key={i} card={card} onDeleteClick={handleCardDelete} />
           ))}
         </ul>
       )}

@@ -16,6 +16,7 @@ function Decks() {
     setIsLoading(true);
     fetchDecks(userId)
       .then((data) => {
+        console.log(data);
         setDecks(data);
       })
       .catch((error) => {
@@ -77,11 +78,11 @@ function Decks() {
         <p>Loading...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
-      ) : decks.length === 0 ? (
+      ) : decks?.length === 0 ? (
         <p>No decks found.</p>
       ) : (
         <ul className="flex flex-col gap-6">
-          {decks.toReversed().map((deck) => (
+          {decks?.toReversed().map((deck) => (
             <Deck key={deck.id} deck={deck} onDeleteClick={handleDeckDelete} />
           ))}
         </ul>

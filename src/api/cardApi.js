@@ -15,7 +15,6 @@ import {
 export const fetchCards = async (deckId) => {
   const response = await fetch(`${BASE_URL}/decks/${deckId}/cards`, {
     method: "GET",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -38,7 +37,6 @@ export const fetchCards = async (deckId) => {
 export const createCard = async (question, answer, deckId) => {
   const response = await fetch(`${BASE_URL}/cards`, {
     method: "POST",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -65,7 +63,6 @@ export const createCard = async (question, answer, deckId) => {
 export const updateCard = async (id, question, answer) => {
   const response = await fetch(`${BASE_URL}/cards/${id}`, {
     method: "PATCH",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -93,7 +90,6 @@ export const updateCard = async (id, question, answer) => {
 export const deleteCard = async (id) => {
   const response = await fetch(`${BASE_URL}/cards/${id}`, {
     method: "DELETE",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

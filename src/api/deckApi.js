@@ -14,7 +14,6 @@ import {
 export const fetchDecks = async (userId) => {
   const response = await fetch(`${BASE_URL}/users/${userId}/decks`, {
     method: "GET",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -37,7 +36,6 @@ export const fetchDecks = async (userId) => {
 export const createDeck = async (deckName, description, userId) => {
   const response = await fetch(`${BASE_URL}/decks`, {
     method: "POST",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -64,7 +62,6 @@ export const createDeck = async (deckName, description, userId) => {
 export const updateDeck = async (id, name, description) => {
   const response = await fetch(`${BASE_URL}/decks/${id}`, {
     method: "PATCH",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -89,7 +86,6 @@ export const updateDeck = async (id, name, description) => {
 export const deleteDeck = async (id) => {
   const response = await fetch(`${BASE_URL}/decks/${id}`, {
     method: "DELETE",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
