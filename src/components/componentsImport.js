@@ -1,4 +1,4 @@
-import Menu from "./Menu.jsx";
+import Menu from "./Menu/Menu.jsx";
 import Deck from "./Deck/Deck.jsx";
 import DeckForm from "./DeckForm/DeckForm.jsx";
 import CardForm from "./CardForm/CardForm.jsx";

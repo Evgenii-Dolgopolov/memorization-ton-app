@@ -16,7 +16,6 @@ function Decks() {
     setIsLoading(true);
     fetchDecks(userId)
       .then((data) => {
-        console.log(data);
         setDecks(data);
       })
       .catch((error) => {
