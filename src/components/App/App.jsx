@@ -8,11 +8,11 @@ import "../../index.css";
 import {
   Decks,
   Play,
-  Statistics,
   Settings,
   Cards,
 } from "../../pages/pagesImport.js";
 import { Menu } from "../componentsImport.js";
+import NextCard from "../../pages/NextCard.jsx";
 
 function App() {
   return (
@@ -21,9 +21,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/decks" />} />
           <Route path="/play" element={<Play />} />
+          <Route path="/cards/next/:deckId" element={<NextCard />} />
           <Route path="/decks" element={<Decks />} />
           <Route path="/decks/:deckId/cards" element={<Cards />} />
-          <Route path="/statistics" element={<Statistics />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
         <Menu />

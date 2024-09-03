@@ -125,5 +125,6 @@ export const nextCard = async (deckId) => {
         throw new Error(UNKNOWN_ERROR);
     }
   }
-  return await response.json();
+  const json = await response.json();
+  return json.data;
 };
