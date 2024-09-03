@@ -19,3 +19,4 @@ export const INVALID_CARD_ID_ERROR = "Invalid card ID";
 export const CARD_NOT_FOUND_ERROR = "Card not found";
 export const UPDATE_CARD_ERROR = "Failed to update card";
 export const DELETE_CARD_ERROR = "Failed to delete card";
+export const NEXT_CARD_ERROR = "Failed to retrieve next card";

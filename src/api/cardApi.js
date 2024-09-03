@@ -7,6 +7,7 @@ import {
   INVALID_CARD_ID_ERROR,
   INVALID_DECK_ID_ERROR,
   INVALID_USER_ID_ERROR,
+  NEXT_CARD_ERROR,
   UNKNOWN_ERROR,
   UPDATE_CARD_ERROR,
 } from "../utils/constants.js";
@@ -104,4 +105,25 @@ export const deleteCard = async (id) => {
         throw new Error(UNKNOWN_ERROR);
     }
   }
+};
+
+// Next card
+export const nextCard = async (deckId) => {
+  const response = await fetch(`${BASE_URL}/cards/next/${deckId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    switch (response.status) {
+      case 400:
+        throw new Error(INVALID_DECK_ID_ERROR);
+      case 500:
+        throw new Error(NEXT_CARD_ERROR);
+      default:
+        throw new Error(UNKNOWN_ERROR);
+    }
+  }
+  return await response.json();
 };
