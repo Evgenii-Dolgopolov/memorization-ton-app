@@ -130,11 +130,15 @@ export const nextCard = async (deckId) => {
 };
 
 // Rate card
-export const rateCard = async (cardId) => {
+export const rateCard = async (cardId, value) => {
   const response = await fetch(`${BASE_URL}/cards/${cardId}/rate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      quality: value,
+    }),
   });
+
   if (!response.ok) {
     switch (response.status) {
       case 400:

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { nextCard as fetchNextCard } from "../api/cardApi.js";
+import { nextCard as fetchNextCard, rateCard } from "../api/cardApi.js";
 import { useParams } from "react-router-dom";
 import Template from "../components/Template/Template.jsx";
 import { Button } from "../components/componentsImport.js";
@@ -25,7 +25,7 @@ function NextCard() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [deckId]);
+  }, [deckId, setNextCard]);
 
   const getCardValueByKey = (key) => {
     const ratingObject = RATING.find((value) =>
@@ -37,6 +37,21 @@ function NextCard() {
 
   const handleRevealAnswerClick = () => {
     setHasShownAnswer(!hasShownAnswer);
+  };
+
+  const handleRateCardClick = async (e, value) => {
+    e.preventDefault();
+    setHasShownAnswer(false);
+    try {
+      await rateCard(nextCard.id, parseInt(value));
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+      const newCard = await fetchNextCard(deckId);
+      setNextCard(newCard);
+      console.log("next card invoked");
+    }
   };
 
   return (
@@ -67,6 +82,10 @@ function NextCard() {
                 <Button
                   key={index}
                   value={getCardValueByKey(Object.keys(ratingNumber)[0])}
+                  onClick={(e) =>
+                    handleRateCardClick(e, Object.keys(ratingNumber)[0])
+                  }
+                  type="submit"
                 >
                   {getCardValueByKey(Object.keys(ratingNumber)[0])}
                 </Button>
