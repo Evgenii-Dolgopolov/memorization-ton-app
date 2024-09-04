@@ -10,9 +10,9 @@ import {
   Play,
   Settings,
   Cards,
+  NextCard,
 } from "../../pages/pagesImport.js";
 import { Menu } from "../componentsImport.js";
-import NextCard from "../../pages/NextCard.jsx";
 
 function App() {
   return (

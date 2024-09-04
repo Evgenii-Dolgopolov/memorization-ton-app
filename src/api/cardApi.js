@@ -128,3 +128,21 @@ export const nextCard = async (deckId) => {
   const json = await response.json();
   return json.data;
 };
+
+// Rate card
+export const rateCard = async (cardId) => {
+  const response = await fetch(`${BASE_URL}/cards/${cardId}/rate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    switch (response.status) {
+      case 400:
+        throw new Error(INVALID_CARD_ID_ERROR);
+      case 500:
+        throw new Error(UPDATE_CARD_ERROR);
+      default:
+        throw new Error(UNKNOWN_ERROR);
+    }
+  }
+};

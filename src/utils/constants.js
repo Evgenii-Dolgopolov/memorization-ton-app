@@ -20,3 +20,12 @@ export const CARD_NOT_FOUND_ERROR = "Card not found";
 export const UPDATE_CARD_ERROR = "Failed to update card";
 export const DELETE_CARD_ERROR = "Failed to delete card";
 export const NEXT_CARD_ERROR = "Failed to retrieve next card";
+
+// Miscellaneous
+export const RATING = [
+  { 1: "Poor" },
+  { 2: "Fair" },
+  { 3: "Okay" },
+  { 4: "Good" },
+  { 5: "Excellent" },
+];

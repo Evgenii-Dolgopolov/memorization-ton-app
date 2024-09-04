@@ -9,25 +9,19 @@ const Menu = () => {
 
   const playIconRef = useRef(null);
   const decksIconRef = useRef(null);
-  const statisticsIconRef = useRef(null);
   const settingsIconRef = useRef(null);
 
   useEffect(() => {
-    const iconRefs = [
-      playIconRef,
-      decksIconRef,
-      statisticsIconRef,
-      settingsIconRef,
-    ];
+    const iconRefs = [playIconRef, decksIconRef, settingsIconRef];
 
-    iconRefs.forEach(ref => {
+    iconRefs.forEach((ref) => {
       if (ref.current) {
         ref.current.classList.remove("fa-bounce");
       }
     });
 
     const activeRef = iconRefs.find(
-      ref =>
+      (ref) =>
         ref.current && ref.current.closest("a")?.pathname === location.pathname
     );
     if (activeRef?.current) {
@@ -58,15 +52,6 @@ const Menu = () => {
           }`}
         >
           <i ref={decksIconRef} className="fa-solid fa-layer-group fa-3x"></i>
-        </Link>
-
-        <Link
-          to="/statistics"
-          className={`w-full flex items-center justify-center border-2 border-none ${
-            currentTab === "statistics" ? styleActiveTab : ""
-          }`}
-        >
-          <i ref={statisticsIconRef} className="fa-solid fa-chart-simple fa-3x"></i>
         </Link>
 
         <Link
