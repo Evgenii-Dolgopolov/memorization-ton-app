@@ -2,29 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, CardForm } from "../components/componentsImport.js";
 import { createCard, fetchCards } from "../api/cardApi.js";
+import { useCardsContext } from "../utils/context/CardsContext.jsx";
 
 function Cards() {
   const { deckId } = useParams();
-  const [cards, setCards] = useState([]);
   const [isCreatingCard, setIsCreatingCard] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [createCardError, setCreateCardError] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const { cards, setCards, handleFetchCards } = useCardsContext();
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchCards(deckId)
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    handleFetchCards(deckId);
   }, [deckId, isCreatingCard]);
 
   const handleAddCardClick = () => {
