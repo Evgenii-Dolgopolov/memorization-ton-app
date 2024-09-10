@@ -4,7 +4,7 @@ import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 import Template from "../Template/Template.jsx";
 import { usePopupsContext } from "../../utils/context/PopupsContext.jsx";
 
-function Deck({ deck, onDeleteClick }) {
+function Deck({ deck }) {
   const { id } = deck;
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
@@ -30,19 +30,6 @@ function Deck({ deck, onDeleteClick }) {
       setIsLoading(false);
     }
   };
-
-  // const handleDeleteClick = async (e) => {
-  //   e.preventDefault();
-  //   setIsDeleting(true);
-  //   try {
-  //     await deleteDeck(id);
-  //     onDeleteClick(id);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsDeleting(false);
-  //   }
-  // };
 
   return isEditing ? (
     <DeckForm

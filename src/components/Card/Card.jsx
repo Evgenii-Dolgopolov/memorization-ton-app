@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button, CardForm } from "../componentsImport.js";
-import { deleteCard, updateCard } from "../../api/cardApi.js";
+import { updateCard } from "../../api/cardApi.js";
 import Template from "../Template/Template.jsx";
+import { usePopupsContext } from "../../utils/context/PopupsContext.jsx";
 
-function Card({ card, onDeleteClick }) {
+function Card({ card }) {
   const { id } = card;
   const [isEditing, setIsEditing] = useState(false);
   const [question, setQuestion] = useState(card.question);
@@ -11,10 +12,12 @@ function Card({ card, onDeleteClick }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
+  const { openDeletePopupHandler } = usePopupsContext();
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
+
   const handleSaveClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -25,18 +28,6 @@ function Card({ card, onDeleteClick }) {
     } finally {
       setIsEditing(false);
       setIsLoading(false);
-    }
-  };
-
-  const handleDeleteClick = async (e) => {
-    e.preventDefault();
-    try {
-      await deleteCard(id);
-      onDeleteClick(id);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -65,7 +56,7 @@ function Card({ card, onDeleteClick }) {
           <Button
             className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
             type="submit"
-            onClick={handleDeleteClick}
+            onClick={() => openDeletePopupHandler({ type: "card", id })}
           >
             Delete card
           </Button>

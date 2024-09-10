@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, CardForm } from "../components/componentsImport.js";
-import { createCard, fetchCards } from "../api/cardApi.js";
+import { createCard } from "../api/cardApi.js";
 import { useCardsContext } from "../utils/context/CardsContext.jsx";
+import { usePopupsContext } from "../utils/context/PopupsContext.jsx";
 
 function Cards() {
   const { deckId } = useParams();
@@ -12,7 +13,8 @@ function Cards() {
   const [createCardError, setCreateCardError] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const { cards, setCards, handleFetchCards } = useCardsContext();
+  const { openDeletePopupHandler } = usePopupsContext();
+  const { cards, handleFetchCards } = useCardsContext();
 
   useEffect(() => {
     handleFetchCards(deckId);
@@ -35,12 +37,6 @@ function Cards() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCardDelete = (deletedCardId) => {
-    setCards((prevCards) =>
-      prevCards.filter((card) => card.id !== deletedCardId)
-    );
   };
 
   return (
@@ -75,7 +71,7 @@ function Cards() {
       ) : (
         <ul className="flex flex-col gap-4">
           {cards?.toReversed().map((card, i) => (
-            <Card key={i} card={card} onDeleteClick={handleCardDelete} />
+            <Card key={i} card={card} onDeleteClick={openDeletePopupHandler} />
           ))}
         </ul>
       )}

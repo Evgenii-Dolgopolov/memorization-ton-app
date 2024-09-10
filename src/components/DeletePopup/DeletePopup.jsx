@@ -5,11 +5,13 @@ import { deleteDeck } from "../../api/deckApi.js";
 import { deleteCard } from "../../api/cardApi.js";
 import { useState } from "react";
 import { useDecksContext } from "../../utils/context/DecksContext.jsx";
+import { useCardsContext } from "../../utils/context/CardsContext.jsx";
 
 const DeletePopup = () => {
   const { isDeletePopupOpen, deleteItem, popupCloseHandler } =
     usePopupsContext();
-  const { decks, setDecks } = useDecksContext();
+  const { setDecks } = useDecksContext();
+  const { setCards } = useCardsContext();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -25,6 +27,9 @@ const DeletePopup = () => {
         );
       } else if (deleteItem?.type === "card") {
         await deleteCard(deleteItem.id);
+        setCards((prevCards) =>
+          prevCards.filter((card) => card.id !== deleteItem.id)
+        );
       }
       popupCloseHandler();
     } catch (error) {

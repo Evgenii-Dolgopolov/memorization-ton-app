@@ -12,7 +12,7 @@ function Decks() {
   const [deckName, setDeckName] = useState("");
   const [description, setDescription] = useState("");
   const { openDeletePopupHandler } = usePopupsContext();
-  const { decks, setDecks, handleFetchDecks, fetchDecksError, isLoading } =
+  const { decks, handleFetchDecks, fetchDecksError, isLoading } =
     useDecksContext();
 
   useEffect(() => {

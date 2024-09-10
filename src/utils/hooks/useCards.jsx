@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { fetchCards } from "../../api/cardApi.js";
 
 const useCards = () => {
-  // const { deckId } = useParams();
   const [cards, setCards] = useState([]);
   const [fetchCardsError, setFetchCardsError] = useState(null);
 
