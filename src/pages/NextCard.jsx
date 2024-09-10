@@ -55,7 +55,7 @@ function NextCard() {
   };
 
   return (
-    <div className="flex flex-col m-4">
+    <section className="flex flex-col p-8">
       {isLoading && <p>Loading...</p>}
       {error && <p>{error.message}</p>}
       {nextCard ? (
@@ -96,7 +96,7 @@ function NextCard() {
       ) : (
         <button>Button to transfer user to create cards</button>
       )}
-    </div>
+    </section>
   );
 }
 

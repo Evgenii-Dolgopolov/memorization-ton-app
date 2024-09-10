@@ -24,10 +24,11 @@ const Play = () => {
   }, []);
 
   return (
-    <div className="p-4 h-screen bg-blue-300">
+    <section className="p-8 h-screen bg-blue-300">
       <ul className="flex flex-col gap-6">
         {decks?.toReversed().map((deck) => (
-          <Template className="bg-amber-600"
+          <Template
+            className="bg-amber-600"
             key={deck.id}
             heading={deck.name}
             description={deck.description}
@@ -35,7 +36,7 @@ const Play = () => {
           />
         ))}
       </ul>
-    </div>
+    </section>
   );
 };
 

@@ -53,7 +53,7 @@ function Cards() {
   };
 
   return (
-    <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
+    <section className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
       <h1 className="text-center text-4xl font-bold">Your cards</h1>
       <Button
         className="inline-flex justify-center px-4 py-2 border border-transparent
@@ -88,7 +88,7 @@ function Cards() {
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 }
 
