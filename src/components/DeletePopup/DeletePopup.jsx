@@ -4,25 +4,29 @@ import { usePopupsContext } from "../../utils/context/PopupsContext.jsx";
 import { deleteDeck } from "../../api/deckApi.js";
 import { deleteCard } from "../../api/cardApi.js";
 import { useState } from "react";
+import { useDecksContext } from "../../utils/context/DecksContext.jsx";
 
 const DeletePopup = () => {
   const { isDeletePopupOpen, deleteItem, popupCloseHandler } =
     usePopupsContext();
+  const { decks, setDecks } = useDecksContext();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
 
   const handleDelete = async (e) => {
     e.preventDefault();
     setIsDeleting(true);
-    debugger;
+
     try {
       if (deleteItem?.type === "deck") {
         await deleteDeck(deleteItem.id);
-        // onDeleteClick(deleteItem.id);
+        setDecks((prevDecks) =>
+          prevDecks.filter((deck) => deck.id !== deleteItem.id)
+        );
       } else if (deleteItem?.type === "card") {
-        await deleteCard(deleteItem.id); // реализуйте функцию удаления карточки
+        await deleteCard(deleteItem.id);
       }
-      popupCloseHandler(); // Закрыть попап после удаления
+      popupCloseHandler();
     } catch (error) {
       setError(error.message);
     } finally {

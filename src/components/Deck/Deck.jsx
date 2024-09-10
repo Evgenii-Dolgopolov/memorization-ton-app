@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, DeckForm } from "../componentsImport.js";
 import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 import Template from "../Template/Template.jsx";
+import { usePopupsContext } from "../../utils/context/PopupsContext.jsx";
 
 function Deck({ deck, onDeleteClick }) {
   const { id } = deck;
@@ -11,6 +12,7 @@ function Deck({ deck, onDeleteClick }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
+  const { openDeletePopupHandler } = usePopupsContext();
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -29,18 +31,18 @@ function Deck({ deck, onDeleteClick }) {
     }
   };
 
-  const handleDeleteClick = async (e) => {
-    e.preventDefault();
-    setIsDeleting(true);
-    try {
-      await deleteDeck(id);
-      onDeleteClick(id);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  // const handleDeleteClick = async (e) => {
+  //   e.preventDefault();
+  //   setIsDeleting(true);
+  //   try {
+  //     await deleteDeck(id);
+  //     onDeleteClick(id);
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsDeleting(false);
+  //   }
+  // };
 
   return isEditing ? (
     <DeckForm
@@ -71,7 +73,7 @@ function Deck({ deck, onDeleteClick }) {
           <Button
             className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
             type="submit"
-            onClick={handleDeleteClick}
+            onClick={() => openDeletePopupHandler({ type: "deck", id })}
           >
             Delete deck
           </Button>

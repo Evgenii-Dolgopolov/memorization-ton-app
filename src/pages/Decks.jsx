@@ -1,29 +1,22 @@
 import { useState, useEffect } from "react";
 import { Deck, Button, DeckForm } from "../components/componentsImport.js";
-import { createDeck, fetchDecks } from "../api/deckApi.js";
+import { createDeck } from "../api/deckApi.js";
 import { USER_ID as userId } from "../utils/constants.js";
+import { usePopupsContext } from "../utils/context/PopupsContext.jsx";
+import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 function Decks() {
-  const [decks, setDecks] = useState([]);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [createDeckError, setCreateDeckError] = useState(null);
   const [deckName, setDeckName] = useState("");
   const [description, setDescription] = useState("");
+  const { openDeletePopupHandler } = usePopupsContext();
+  const { decks, setDecks, handleFetchDecks, fetchDecksError, isLoading } =
+    useDecksContext();
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchDecks(userId)
-      .then((data) => {
-        setDecks(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    handleFetchDecks();
   }, [isCreatingDeck]);
 
   const handleNewDeckClick = () => {
@@ -32,27 +25,20 @@ function Decks() {
 
   const handleCreateDeck = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsCreatingDeck(true);
     try {
       await createDeck(deckName, description, userId);
       setDeckName("");
       setDescription("");
-      setIsCreatingDeck(false);
     } catch (error) {
       setCreateDeckError(error.message);
     } finally {
-      setIsLoading(false);
+      setIsCreatingDeck(false);
     }
   };
 
-  const handleDeckDelete = (deletedDeckId) => {
-    setDecks((prevDecks) =>
-      prevDecks.filter((deck) => deck.id !== deletedDeckId)
-    );
-  };
-
   return (
-    <div className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
+    <section className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
       <Button
         className="inline-flex justify-center px-4 py-2 border border-transparent
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
@@ -75,18 +61,22 @@ function Decks() {
       )}
       {isLoading ? (
         <p>Loading...</p>
-      ) : error ? (
+      ) : fetchDecksError ? (
         <p className="text-red-500">{error}</p>
       ) : decks?.length === 0 ? (
         <p>No decks found.</p>
       ) : (
         <ul className="flex flex-col gap-6">
           {decks?.toReversed().map((deck) => (
-            <Deck key={deck.id} deck={deck} onDeleteClick={handleDeckDelete} />
+            <Deck
+              key={deck.id}
+              deck={deck}
+              onDeleteClick={openDeletePopupHandler}
+            />
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 }
 
