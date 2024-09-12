@@ -3,9 +3,11 @@ import { Button, DeckForm } from "../componentsImport.js";
 import { updateDeck, deleteDeck } from "../../api/deckApi.js";
 import Template from "../Template/Template.jsx";
 import { usePopupsContext } from "../../utils/context/PopupsContext.jsx";
+import { useDecksContext } from "../../utils/context/DecksContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Deck({ deck }) {
-  const { id } = deck;
+  // const { id } = deck;
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
   const [isEditing, setIsEditing] = useState(false);
@@ -13,6 +15,8 @@ function Deck({ deck }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
   const { openDeletePopupHandler } = usePopupsContext();
+  const { deckSetter } = useDecksContext();
+  const navigate = useNavigate();
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -29,6 +33,11 @@ function Deck({ deck }) {
       setIsEditing(false);
       setIsLoading(false);
     }
+  };
+
+  const cardsClickHandler = () => {
+    deckSetter(deck);
+    navigate(`/decks/${deck.id}/cards`);
   };
 
   return isEditing ? (
@@ -64,9 +73,15 @@ function Deck({ deck }) {
           >
             Delete deck
           </Button>
+          {/*<Button*/}
+          {/*  className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"*/}
+          {/*  to={`/decks/${id}/cards`}*/}
+          {/*>*/}
+          {/*  Cards*/}
+          {/*</Button>*/}
           <Button
             className="text-xs px-4 py-2 bg-blue-400 rounded-3xl"
-            to={`/decks/${id}/cards`}
+            onClick={cardsClickHandler}
           >
             Cards
           </Button>

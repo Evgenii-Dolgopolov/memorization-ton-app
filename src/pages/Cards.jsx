@@ -4,6 +4,7 @@ import { Button, Card, CardForm } from "../components/componentsImport.js";
 import { createCard } from "../api/cardApi.js";
 import { useCardsContext } from "../utils/context/CardsContext.jsx";
 import { usePopupsContext } from "../utils/context/PopupsContext.jsx";
+import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 function Cards() {
   const { deckId } = useParams();
@@ -15,6 +16,7 @@ function Cards() {
   const [answer, setAnswer] = useState("");
   const { openDeletePopupHandler } = usePopupsContext();
   const { cards, handleFetchCards } = useCardsContext();
+  const { deck } = useDecksContext();
 
   useEffect(() => {
     handleFetchCards(deckId);
@@ -41,7 +43,7 @@ function Cards() {
 
   return (
     <section className="p-8 min-h-screen flex flex-col gap-6 bg-purple-300">
-      <h1 className="text-center text-4xl font-bold">Your cards</h1>
+      <h1 className="text-center text-4xl font-bold">{deck.name}</h1>
       <Button
         className="inline-flex justify-center px-4 py-2 border border-transparent
         text-md font-bold rounded-md shadow-lg text-white bg-indigo-600 hover:bg-indigo-700
