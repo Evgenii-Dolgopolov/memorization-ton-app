@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Button, Card, CardForm } from "../components/componentsImport.js";
 import { createCard } from "../api/cardApi.js";
 import { useCardsContext } from "../utils/context/CardsContext.jsx";
@@ -7,7 +6,6 @@ import { usePopupsContext } from "../utils/context/PopupsContext.jsx";
 import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 function Cards() {
-  const { deckId } = useParams();
   const [isCreatingCard, setIsCreatingCard] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,8 +17,8 @@ function Cards() {
   const { deck } = useDecksContext();
 
   useEffect(() => {
-    handleFetchCards(deckId);
-  }, [deckId, isCreatingCard]);
+    handleFetchCards(deck.id);
+  }, [deck.id, isCreatingCard]);
 
   const handleAddCardClick = () => {
     setIsCreatingCard(!isCreatingCard);
@@ -30,7 +28,7 @@ function Cards() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await createCard(question, answer, deckId);
+      await createCard(question, answer, deck.id);
       setQuestion("");
       setAnswer("");
       setIsCreatingCard(false);

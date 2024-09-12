@@ -5,7 +5,9 @@ import { fetchDecks } from "../../api/deckApi.js";
 const useDecks = () => {
   const [decks, setDecks] = useState([]);
   const [fetchDecksError, setFetchDecksError] = useState(null);
-  const [deck, setDeck] = useState(null);
+  const [deck, setDeck] = useState(
+    localStorage.getItem("deck") ? JSON.parse(localStorage.getItem("deck")) : []
+  );
 
   const handleFetchDecks = async () => {
     try {
@@ -18,6 +20,7 @@ const useDecks = () => {
 
   const deckSetter = (newDeck) => {
     setDeck(newDeck);
+    localStorage.setItem("deck", JSON.stringify(newDeck));
   };
 
   return {
