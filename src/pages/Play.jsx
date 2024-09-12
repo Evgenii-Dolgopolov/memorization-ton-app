@@ -1,26 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { fetchDecks } from "../api/deckApi.js";
-import { USER_ID as userId } from "../utils/constants.js";
-import { Deck } from "../components/componentsImport.js";
+import React, { useEffect } from "react";
 import Template from "../components/Template/Template.jsx";
+import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 const Play = () => {
-  const [decks, setDecks] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { decks, handleFetchDecks } = useDecksContext();
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchDecks(userId)
-      .then((data) => {
-        setDecks(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    handleFetchDecks();
   }, []);
 
   return (

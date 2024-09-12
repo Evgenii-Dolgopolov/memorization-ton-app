@@ -17,7 +17,6 @@ function NextCard() {
     fetchNextCard(deckId)
       .then((data) => {
         setNextCard(data);
-        console.log(data);
       })
       .catch((error) => {
         setError(error.message);
