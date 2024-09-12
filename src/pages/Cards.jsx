@@ -7,13 +7,13 @@ import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 function Cards() {
   const [isCreatingCard, setIsCreatingCard] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [isShowForm, setIsShowForm] = useState(false);
   const [createCardError, setCreateCardError] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const { openDeletePopupHandler } = usePopupsContext();
-  const { cards, handleFetchCards } = useCardsContext();
+  const { cards, handleFetchCards, isCardsLoading, fetchCardsError } =
+    useCardsContext();
   const { deck } = useDecksContext();
 
   useEffect(() => {
@@ -21,21 +21,21 @@ function Cards() {
   }, [deck.id, isCreatingCard]);
 
   const handleAddCardClick = () => {
-    setIsCreatingCard(!isCreatingCard);
+    setIsShowForm(!isShowForm);
   };
 
   const handleCreateCard = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsCreatingCard(true);
     try {
       await createCard(question, answer, deck.id);
       setQuestion("");
       setAnswer("");
-      setIsCreatingCard(false);
+      setIsShowForm(false);
     } catch (error) {
       setCreateCardError(error.message);
     } finally {
-      setIsLoading(false);
+      setIsCreatingCard(false);
     }
   };
 
@@ -51,9 +51,9 @@ function Cards() {
       >
         Add Card
       </Button>
-      {isCreatingCard && (
+      {isShowForm && (
         <CardForm
-          buttonName={isLoading ? "Creating..." : "Create Card"}
+          buttonName={isCreatingCard ? "Creating..." : "Create Card"}
           question={question}
           handleQuestionChange={(e) => setQuestion(e.target.value)}
           answer={answer}
@@ -62,10 +62,10 @@ function Cards() {
           error={createCardError}
         />
       )}
-      {isLoading ? (
+      {isCardsLoading ? (
         <p>Loading...</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
+      ) : fetchCardsError ? (
+        <p className="text-red-500">{fetchCardsError}</p>
       ) : cards?.length === 0 ? (
         <p>No cards found.</p>
       ) : (

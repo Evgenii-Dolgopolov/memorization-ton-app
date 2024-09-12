@@ -2,7 +2,7 @@
 export const BASE_URL = "http://localhost:8080";
 export const USER_ID = "3a06fc24-becf-482a-8098-91470ce047d5";
 // FakeID
-// const USER_ID = "3a06fc24-becf-482a-8098-91470ce04d5";
+// export const USER_ID = "3a06fc24-becf-482a-8098-91470ce04d5";
 
 // Errors
 export const UNKNOWN_ERROR = "An unknown error occurred";

@@ -8,14 +8,20 @@ const useDecks = () => {
   const [deck, setDeck] = useState(
     localStorage.getItem("deck") ? JSON.parse(localStorage.getItem("deck")) : []
   );
+  const [isDecksLoading, setIsDecksLoading] = useState(false);
 
-  const handleFetchDecks = async () => {
-    try {
-      const data = await fetchDecks(userId);
-      setDecks(data);
-    } catch (error) {
-      setFetchDecksError(error.message);
-    }
+  const handleFetchDecks = () => {
+    setIsDecksLoading(true);
+    fetchDecks(userId)
+      .then((data) => {
+        setDecks(data);
+      })
+      .catch((error) => {
+        setFetchDecksError(error.message);
+      })
+      .finally(() => {
+        setIsDecksLoading(false);
+      });
   };
 
   const deckSetter = (newDeck) => {
@@ -30,6 +36,7 @@ const useDecks = () => {
     fetchDecksError,
     deck,
     deckSetter,
+    isDecksLoading,
   };
 };
 

@@ -6,34 +6,35 @@ import { usePopupsContext } from "../utils/context/PopupsContext.jsx";
 import { useDecksContext } from "../utils/context/DecksContext.jsx";
 
 function Decks() {
-  const [isCreatingDeck, setIsCreatingDeck] = useState(false);
-  const [error, setError] = useState(null);
+  const [isShowForm, setIsShowForm] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [createDeckError, setCreateDeckError] = useState(null);
   const [deckName, setDeckName] = useState("");
   const [description, setDescription] = useState("");
   const { openDeletePopupHandler } = usePopupsContext();
-  const { decks, handleFetchDecks, fetchDecksError, isLoading } =
+  const { decks, handleFetchDecks, fetchDecksError, isDecksLoading } =
     useDecksContext();
 
   useEffect(() => {
     handleFetchDecks();
-  }, [isCreatingDeck]);
+  }, [isCreating]);
 
   const handleNewDeckClick = () => {
-    setIsCreatingDeck(!isCreatingDeck);
+    setIsShowForm(!isShowForm);
   };
 
   const handleCreateDeck = async (e) => {
     e.preventDefault();
-    setIsCreatingDeck(true);
+    setIsCreating(true);
     try {
       await createDeck(deckName, description, userId);
       setDeckName("");
       setDescription("");
+      setIsShowForm(false);
     } catch (error) {
       setCreateDeckError(error.message);
     } finally {
-      setIsCreatingDeck(false);
+      setIsCreating(false);
     }
   };
 
@@ -48,9 +49,9 @@ function Decks() {
       >
         New Deck
       </Button>
-      {isCreatingDeck && (
+      {isShowForm && (
         <DeckForm
-          buttonName={isLoading ? "Creating..." : "Create Deck"}
+          buttonName={isCreating ? "Creating..." : "Create Deck"}
           handleSubmit={handleCreateDeck}
           deckName={deckName}
           handleNameDeckChange={(e) => setDeckName(e.target.value)}
@@ -59,11 +60,11 @@ function Decks() {
           error={createDeckError}
         />
       )}
-      {isLoading ? (
+      {isDecksLoading ? (
         <p>Loading...</p>
       ) : fetchDecksError ? (
-        <p className="text-red-500">{error}</p>
-      ) : decks?.length === 0 ? (
+        <p className="text-red-500">{fetchDecksError}</p>
+      ) : decks && decks?.length === 0 ? (
         <p>No decks found.</p>
       ) : (
         <ul className="flex flex-col gap-6">
